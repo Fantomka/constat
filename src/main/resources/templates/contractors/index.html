@@ -1,25 +1,40 @@
-<!--TODO ОБНОВИТЬ ДЛЯ КОНТРАГЕНТОВ --><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Все люди</title>
+    <title>Все контрагенты</title>
 </head>
 <body>
 
-<div th:each="person : ${people}">
-    <a th:href="@{/people/{id}(id=${person.getId()})}"
-       th:text="|${person.getFullName()}, ${person.getYearOfBirth()}|">user</a>
-</div>
+<!--<tr th:each="contractor : ${contractors}">-->
+<!--    <a th:href="@{/contractor/{id}(id=${contractor.getINN()})}"-->
+<!--       th:text="|${contractor.getINN()}, ${contractor.getOrgName()}|">user</a>-->
+<!--</tr>-->
+
+<table>
+    <thead>
+    <tr>
+        <th> INN </th>
+        <th> Score </th>
+        <th> Organization name </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="contractor : ${contractors}">
+        <td><a th:href="@{/contractor/{id}(id=${contractor.getINN()})}"
+                th:text="${contractor.getINN()}"> Title </a></td>
+        <td align="center"><span th:text="${contractor.getRate()}"> Score </span></td>
+        <td><span th:text="${contractor.getOrgName()}"> Organization name </span></td>
+    </tr>
+    </tbody>
+</table>
 
 <br/>
 <hr/>
 
-<form method="GET" action="/people/new">
-    <input type="submit" value="Добавить человека"/>
-</form>
-
-<form method="GET" action="/books">
-    <input type="submit" value="Посмотреть книги"/>
+<form method="GET" action="/contractor/new">
+    <input type="submit" value="Добавить нового контрагента"/>
 </form>
 
 </body>
