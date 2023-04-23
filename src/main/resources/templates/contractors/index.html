@@ -11,13 +11,20 @@
 <!--       th:text="|${contractor.getINN()}, ${contractor.getOrgName()}|">user</a>-->
 <!--</tr>-->
 
+
+<form method="GET" action="/contractors/new">
+    <input type="submit" value="Добавить нового контрагента"/>
+</form>
+
+<br/>
+<hr/>
+
 <table>
     <thead>
     <tr>
         <th> INN </th>
         <th> Score </th>
         <th> Organization name </th>
-
     </tr>
     </thead>
     <tbody>
@@ -29,13 +36,6 @@
     </tr>
     </tbody>
 </table>
-
-<br/>
-<hr/>
-
-<form method="GET" action="/contractor/new">
-    <input type="submit" value="Добавить нового контрагента"/>
-</form>
 
 </body>
 </html>

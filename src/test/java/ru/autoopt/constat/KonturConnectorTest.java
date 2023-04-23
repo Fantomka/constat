@@ -8,8 +8,9 @@ import ru.autoopt.constat.util.KonturConnector;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KonturConnectorTest {
 
+
+public class KonturConnectorTest {
 
     @Test
     public void konturGetRequestTest() {

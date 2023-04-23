@@ -32,7 +32,7 @@ public class ContractorService {
         List<Contractor> index = contractorRepository.findAll();
         return index.stream()
                 .map(contractor ->
-                        enrichContractorWithReq(modelMapper.map(contractor, ContractorDTO.class))
+                        konturConnector.enrichContractorWithReq(modelMapper.map(contractor, ContractorDTO.class))
                 ).toList();
     }
 
@@ -40,18 +40,10 @@ public class ContractorService {
         return contractorRepository.findByINN(INN);
     }
 
-    private ContractorDTO enrichContractorWithReq(ContractorDTO contractorDTO) {
-        Map<String, String> params = new HashMap<>();
-        params.put("inn", contractorDTO.getINN());
-        JsonNode response = konturConnector.getRequest("req", params);
-        // TODO сделать методы, достающие данные из ИП и ЮЛ раздельно
-        String orgName = getString(response.get(0).get("UL") == null ? response.get(0).get("IP").get("fio") : response.get(0).get("UL").get("legalName").get("full"));
-        contractorDTO.setOrgName(orgName);
-        return contractorDTO;
-    }
-
-    private String getString(JsonNode node) {
-        return String.valueOf(node).replaceAll("^\"|\"$", "").replaceAll("\\\\", "");
+    @Transactional
+    public void save(Contractor contractor) {
+        contractor.setRate(0);
+        contractorRepository.save(contractor);
     }
 
 }

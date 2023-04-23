@@ -17,7 +17,7 @@ public class Contractor {
     private int id;
 
     @NotEmpty(message = "ИНН - обязательное поле")
-    @Size(min = 10, max = 12, message = "Длина ИНН может быть либо 10 символов, либо 12")
+    @Size(min = 10, max = 10, message = "Длина ИНН Юридического лица должна быть ровно 10 цифр.")
     @Column(name = "INN")
     private String INN;
 
