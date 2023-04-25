@@ -2,81 +2,83 @@ package ru.autoopt.constat.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
-//TODO Прописать здесь все поля, необходимые к задаче
+import java.util.Date;
+
+@Data
+@ToString(onlyExplicitlyIncluded = true)
 public class ContractorDTO {
 
     @NotEmpty(message = "ИНН - обязательное поле")
     @Size(min = 10, max = 10, message = "Длина ИНН Юридического лица должна быть ровно 10 цифр.")
-    private String INN;
-    private int rate;
+    @ToString.Include
+    private final String INN;
+
+    // Балл - оценка.
+    // Оценка выставляется в соответствии с ренджем балла:
+    // 0 - 10, 11 - 20, 21 - 35, 36 - 50
+    // Больше информации в таблице просчёта балла
+    @ToString.Include
+    private final int rate;
+
+    // Имя организации, используется для вывода на фронте
+    @ToString.Include
     private String orgName;
-    private String ogrn;
+
+    // Ссылка на контрагента в контуре, используется на фронте
     private String focusHref;
-    private String address;
-    private String foundingDate;
 
-    public String getINN() {
-        return INN;
-    }
+    // Дата основания компании
+    private Date foundingDate;
 
-    public void setINN(String INN) {
-        this.INN = INN;
-    }
+    // Имеет ли контрагент несколько ЮР адресов
+    private boolean hasMassOrgAddress;
 
-    public int getRate() {
-        return rate;
-    }
+    // Имеет ли сайты
+    private boolean hasSites;
 
-    public void setRate(int rate) {
-        this.rate = rate;
-    }
+    //Дата последней смены собственника
+    private Date lastHeadChange;
 
-    public String getOrgName() {
-        return orgName;
-    }
+    // Количество сотрудников
+    // NOTE:API не всегда имеет это поле, может быть null
+    private int countEmployees;
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
-    }
+    // Выручка
+    private long revenue;
 
-    public String getOgrn() {
-        return ogrn;
-    }
+    // Имеется ли лизинг
+    private boolean hasLeasing;
 
-    public void setOgrn(String ogrn) {
-        this.ogrn = ogrn;
-    }
+    // Имеются ли госзакупки за последний год
+    // Не всегда поле имеется, так что поле Nullable
+    private boolean hasStateProcurements;
 
-    public String getFocusHref() {
-        return focusHref;
-    }
+    // Предоставлял ли контрагент кому-то залоги
+    private boolean hasPledges;
 
-    public void setFocusHref(String focusHref) {
-        this.focusHref = focusHref;
-    }
+    // Имеет ли товарные знаки
+    private boolean hasTradeMarks;
 
-    public String getAddress() {
-        return address;
-    }
+    // Сумма судов в качестве ответчика за последний год
+    private long sumPetitionersOfArbitration;
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    // Запасы торговые
+    private long stockIndustry;
 
-    public String getFoundingDate() {
-        return foundingDate;
-    }
+    // Дебиторская задолженность
+    private long receivables;
 
-    public void setFoundingDate(String foundingDate) {
-        this.foundingDate = foundingDate;
-    }
+    // Краткосрочные заемные средства
+    private long ShortTermBorrowedFunds;
 
-    public ContractorDTO(String INN, int rate) {
-        this.INN = INN;
-        this.rate = rate;
-    }
+    // Кредиторская задолженность
+    private long accountsPayable;
 
-    public ContractorDTO() {
-    }
+    // Валовая прибыль
+    private long grossProfit;
+
+    // Чистая прибыль
+    private long netIncome;
 }
