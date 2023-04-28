@@ -1,6 +1,7 @@
 package ru.autoopt.constat.controllers;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,16 +16,11 @@ import ru.autoopt.constat.util.validators.ContractorValidator;
 
 @Controller
 @RequestMapping("/contractors")
+@AllArgsConstructor
 public class ContractorController {
 
     private final ContractorService contractorService;
     private final ContractorValidator contractorValidator;
-
-    @Autowired
-    public ContractorController(ContractorService contractorService, ContractorValidator contractorValidator) {
-        this.contractorService = contractorService;
-        this.contractorValidator = contractorValidator;
-    }
 
     @GetMapping()
     public String index(Model model) {

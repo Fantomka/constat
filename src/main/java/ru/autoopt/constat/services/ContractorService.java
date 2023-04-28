@@ -1,7 +1,7 @@
 package ru.autoopt.constat.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +15,12 @@ import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
+@AllArgsConstructor
 public class ContractorService {
 
     private final ContractorRepository contractorRepository;
     private final KonturConnector konturConnector;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public ContractorService(ContractorRepository contractorRepository, KonturConnector konturConnector, ModelMapper modelMapper, ObjectMapper objectMapper) {
-        this.contractorRepository = contractorRepository;
-        this.konturConnector = konturConnector;
-        this.modelMapper = modelMapper;
-    }
 
     public List<ContractorDTO> index() {
         List<Contractor> index = contractorRepository.findAll();
