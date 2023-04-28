@@ -47,24 +47,27 @@ public class ContractorDTO {
     // NOTE:API не всегда имеет это поле, может быть null
     private Boolean countEmployeesEnough;
 
-    // Выручка
+    // Выручка проходит условие
     private Boolean isRevenueOk;
 
+    // Выручка
+    private Double revenue;
+
     // Имеется ли лизинг
-    private Boolean hasLeasing;
+    private Boolean isLeasingOk;
 
     // Имеются ли госзакупки за последний год
     // Не всегда поле имеется, так что поле Nullable
     private Boolean hasStateProcurements;
 
     // Предоставлял ли контрагент кому-то залоги
-    private Boolean hasPledges;
+    private Boolean isPledgesOk;
 
     // Имеет ли товарные знаки
     private Boolean hasTradeMarks;
 
     // Сумма судов в качестве ответчика за последний год
-    private Boolean sumPetitionersOfArbitration;
+    private Boolean isSumPetitionersOfArbitrationOk;
 
     // Основные средства
     private Boolean isMainFoundOk;

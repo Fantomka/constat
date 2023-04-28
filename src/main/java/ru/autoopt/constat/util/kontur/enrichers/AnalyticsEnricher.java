@@ -5,9 +5,15 @@ import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.util.kontur.KonturConnector;
 
 public class AnalyticsEnricher implements Enricher {
+
+    @Override
+    public String getApiMethod() {
+        return "analytics";
+    }
+
     @Override
     public ContractorDTO enrich(ContractorDTO contractorDTO, KonturConnector connector) {
-        JsonNode response = connector.getApi(contractorDTO, "analytics");
+        JsonNode response = connector.getApi(contractorDTO, getApiMethod());
 
 
         JsonNode countEmployees = response.get(0).get("analytics").get("q7021");

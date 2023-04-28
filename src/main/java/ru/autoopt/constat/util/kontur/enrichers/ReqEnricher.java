@@ -9,8 +9,13 @@ import static ru.autoopt.constat.util.common.CommonHelper.getString;
 
 public class ReqEnricher implements Enricher {
     @Override
+    public String getApiMethod() {
+        return "req";
+    }
+
+    @Override
     public ContractorDTO enrich(ContractorDTO contractorDTO, KonturConnector connector) {
-        JsonNode response = connector.getApi(contractorDTO, "req");
+        JsonNode response = connector.getApi(contractorDTO, getApiMethod());
 
         String orgName = getString(response.get(0).get("UL").get("legalName").get("full"));
         Boolean foundingDate = dateIsBefore2022_07_01(response.get(0).get("UL").get("registrationDate"));

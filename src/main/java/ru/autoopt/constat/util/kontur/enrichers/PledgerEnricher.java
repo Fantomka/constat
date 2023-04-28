@@ -4,23 +4,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.util.kontur.KonturConnector;
 
-public class SitesEnricher implements Enricher {
+public class PledgerEnricher implements Enricher {
     @Override
     public String getApiMethod() {
-        return "sites";
+        return "pledger";
     }
 
     @Override
     public ContractorDTO enrich(ContractorDTO contractorDTO, KonturConnector connector) {
         JsonNode response = connector.getApi(contractorDTO, getApiMethod());
 
-        JsonNode sites = response.get(0).get("sites");
+        Boolean hasLeasing = response.get(0).get("pledges").isEmpty();
 
-        Boolean hasSites;
-        if (sites != null) hasSites = sites.size() > 0;
-        else hasSites = false;
+        contractorDTO.setIsLeasingOk(hasLeasing);
 
-        contractorDTO.setHasSites(hasSites);
         return contractorDTO;
     }
 }

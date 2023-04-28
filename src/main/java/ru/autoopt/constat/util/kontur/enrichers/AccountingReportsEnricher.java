@@ -8,9 +8,15 @@ import ru.autoopt.constat.util.kontur.KonturConnector;
 import java.util.Iterator;
 
 public class AccountingReportsEnricher implements Enricher {
+
+    @Override
+    public String getApiMethod() {
+        return "accountingReports";
+    }
+
     @Override
     public ContractorDTO enrich(ContractorDTO contractorDTO, KonturConnector connector) {
-        JsonNode response = connector.getApi(contractorDTO, "accountingReports");
+        JsonNode response = connector.getApi(contractorDTO, getApiMethod());
 
 
         // Вытаскиваем все нужные поля
@@ -85,6 +91,7 @@ public class AccountingReportsEnricher implements Enricher {
 
         // Укладываем результаты в модель
         contractorDTO.setIsRevenueOk(isRevenueOk);
+        contractorDTO.setRevenue(revenue);
         contractorDTO.setIsMainFoundOk(mainFounds);
         contractorDTO.setIsStockIndustryOk(isStockIndustryOk);
         contractorDTO.setIsReceivablesOk(isReceivablesOk);

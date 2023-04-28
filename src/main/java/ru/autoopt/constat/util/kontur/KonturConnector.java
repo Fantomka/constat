@@ -34,7 +34,8 @@ public class KonturConnector {
     public JsonNode getApi(ContractorDTO contractorDTO, String apiMethod) {
         Map<String, String> params = new HashMap<>();
         params.put("inn", contractorDTO.getINN());
-        return getRequest(apiMethod, params);
+        JsonNode response = getRequest(apiMethod, params);
+        return response;
     }
 
     private JsonNode getRequest(String apiMethod, Map<String, String> qParams) {
