@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.Date;
-
 @Data
 @ToString(onlyExplicitlyIncluded = true)
 public class ContractorDTO {
@@ -20,7 +18,7 @@ public class ContractorDTO {
     // 0 - 10, 11 - 20, 21 - 35, 36 - 50
     // Больше информации в таблице просчёта балла
     @ToString.Include
-    private final int rate;
+    private final Integer rate;
 
     // Имя организации, используется для вывода на фронте
     @ToString.Include
@@ -29,56 +27,60 @@ public class ContractorDTO {
     // Ссылка на контрагента в контуре, используется на фронте
     private String focusHref;
 
-    // Дата основания компании
-    private Date foundingDate;
+    //************** Поля с проверками параметром (задаются в enrichers) **************
+
+    // Дата основания компании до 01.07.2022
+    private Boolean foundingDateOk;
+
+    private Boolean isStatusOk;
 
     // Имеет ли контрагент несколько ЮР адресов
-    private boolean hasMassOrgAddress;
+    private Boolean hasMassOrgAddress;
 
     // Имеет ли сайты
-    private boolean hasSites;
+    private Boolean hasSites;
 
-    //Дата последней смены собственника
-    private Date lastHeadChange;
+    // Дата изменения собственника до 01.07.2022
+    private Boolean lastHeadChangeDateOk;
 
     // Количество сотрудников
     // NOTE:API не всегда имеет это поле, может быть null
-    private int countEmployees;
+    private Boolean countEmployeesEnough;
 
     // Выручка
-    private long revenue;
+    private Boolean isRevenueOk;
 
     // Имеется ли лизинг
-    private boolean hasLeasing;
+    private Boolean hasLeasing;
 
     // Имеются ли госзакупки за последний год
     // Не всегда поле имеется, так что поле Nullable
-    private boolean hasStateProcurements;
+    private Boolean hasStateProcurements;
 
     // Предоставлял ли контрагент кому-то залоги
-    private boolean hasPledges;
+    private Boolean hasPledges;
 
     // Имеет ли товарные знаки
-    private boolean hasTradeMarks;
+    private Boolean hasTradeMarks;
 
     // Сумма судов в качестве ответчика за последний год
-    private long sumPetitionersOfArbitration;
+    private Boolean sumPetitionersOfArbitration;
+
+    // Основные средства
+    private Boolean isMainFoundOk;
 
     // Запасы торговые
-    private long stockIndustry;
+    private Boolean isStockIndustryOk;
 
     // Дебиторская задолженность
-    private long receivables;
-
-    // Краткосрочные заемные средства
-    private long ShortTermBorrowedFunds;
+    private Boolean isReceivablesOk;
 
     // Кредиторская задолженность
-    private long accountsPayable;
+    private Boolean isAccountsPayableOk;
 
     // Валовая прибыль
-    private long grossProfit;
+    private Boolean isGrossProfitOk;
 
     // Чистая прибыль
-    private long netIncome;
+    private Boolean isNetIncomeOk;
 }

@@ -1,6 +1,5 @@
 package ru.autoopt.constat.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.models.Contractor;
 import ru.autoopt.constat.repositories.ContractorRepository;
-import ru.autoopt.constat.util.KonturConnector;
+import ru.autoopt.constat.util.kontur.KonturConnector;
 
 import java.util.*;
 
@@ -32,7 +31,7 @@ public class ContractorService {
         List<Contractor> index = contractorRepository.findAll();
         return index.stream()
                 .map(contractor ->
-                        konturConnector.enrichContractorWithReq(modelMapper.map(contractor, ContractorDTO.class))
+                        modelMapper.map(contractor, ContractorDTO.class)
                 ).toList();
     }
 
