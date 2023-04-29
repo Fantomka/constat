@@ -8,19 +8,23 @@ import java.util.Date;
 
 @Data
 @ToString(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContractorDTO {
 
     @NotEmpty(message = "ИНН - обязательное поле")
     @Size(min = 10, max = 10, message = "Длина ИНН Юридического лица должна быть ровно 10 цифр.")
     @ToString.Include
-    private final String INN;
+    private String INN;
+    //private final String INN;
 
     // Балл - оценка.
     // Оценка выставляется в соответствии с ренджем балла:
     // 0 - 10, 11 - 20, 21 - 35, 36 - 50
     // Больше информации в таблице просчёта балла
     @ToString.Include
-    private final int rate;
+    private int rate;
+    //private final int rate;
 
     // Имя организации, используется для вывода на фронте
     @ToString.Include
@@ -81,4 +85,16 @@ public class ContractorDTO {
 
     // Чистая прибыль
     private long netIncome;
+
+    public void setINN(String INN) {
+        if(this.INN == null) {
+            this.INN = INN;
+        }
+    }
+
+    public void setRate(int rate) {
+        if(this.rate == 0) {
+            this.rate = rate;
+        }
+    }
 }
