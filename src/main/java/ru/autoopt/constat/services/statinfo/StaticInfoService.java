@@ -6,7 +6,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +18,7 @@ public class StaticInfoService {
     private final Map<StatInfoType, Map<String, Object>> dictionaries = new HashMap<>();
 
     @Autowired
+    @SuppressWarnings("unchecked")
     public StaticInfoService(ObjectMapper objectMapper) throws IOException {
         this.objectMapper = objectMapper;
         for (StatInfoType type: StatInfoType.values()) {
@@ -28,7 +28,7 @@ public class StaticInfoService {
         }
     }
 
-    public void getInfo() {
-        System.out.println("hello");
+    public <T> T getValue(StatInfoType statInfoType, String key, Class<T> tClass) {
+        return tClass.cast(dictionaries.get(statInfoType).get(key));
     }
 }
