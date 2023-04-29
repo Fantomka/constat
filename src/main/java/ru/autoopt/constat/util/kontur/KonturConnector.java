@@ -3,6 +3,7 @@ package ru.autoopt.constat.util.kontur;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
@@ -19,17 +20,12 @@ import java.util.Map;
 
 @Component
 @PropertySource("classpath:application-dev.properties")
+@AllArgsConstructor
 public class KonturConnector {
 
-
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final RestTemplate restTemplate;
+    private final ObjectMapper mapper;
     private final KonturConfigProperties konturConfigProperties;
-
-    @Autowired
-    public KonturConnector(KonturConfigProperties konturConfigProperties) {
-        this.konturConfigProperties = konturConfigProperties;
-    }
 
     public JsonNode getApi(ContractorDTO contractorDTO, String apiMethod) {
         Map<String, String> params = new HashMap<>();

@@ -8,7 +8,7 @@ import ru.autoopt.constat.util.kontur.enrichers.*;
 
 @Service
 @AllArgsConstructor
-public class RateCalculator implements Calculator {
+public class RateCalculatorService implements Calculator {
 
     private final AccountingReportsEnricher accountingReportsEnricher;
     private final AnalyticsEnricher analyticsEnricher;

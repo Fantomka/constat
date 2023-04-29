@@ -17,18 +17,4 @@ public class ConstatApplication {
         SpringApplication.run(ConstatApplication.class, args);
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-
-    @Bean
-    public RestTemplate restTemplate() {
-         return new RestTemplate();
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
 }
