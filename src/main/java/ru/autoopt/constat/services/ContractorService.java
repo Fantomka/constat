@@ -20,7 +20,6 @@ public class ContractorService {
 
     private final ContractorRepository contractorRepository;
     private final ModelMapper modelMapper;
-    private final RateCalculatorService rateCalculatorService;
 
     public List<ContractorDTO> index() {
         List<Contractor> index = contractorRepository.findAll();
