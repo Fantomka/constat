@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,8 @@ public class StaticInfoService {
     public StaticInfoService(ObjectMapper objectMapper) throws IOException {
         this.objectMapper = objectMapper;
         for (StatInfoType type: StatInfoType.values()) {
-            ClassPathResource staticDataResource = new ClassPathResource(type.name() + ".json");
+            String resourcePath = "static" + FileSystems.getDefault().getSeparator() + type.name() + ".json";
+            ClassPathResource staticDataResource = new ClassPathResource(resourcePath);
             dictionaries.put(type, this.objectMapper.readValue(staticDataResource.getInputStream(), Map.class));
         }
     }
@@ -29,5 +31,4 @@ public class StaticInfoService {
     public void getInfo() {
         System.out.println("hello");
     }
-
 }
