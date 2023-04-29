@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ContractorRepository extends JpaRepository<Contractor, Integer> {
+public interface ContractorRepository extends JpaRepository<Contractor, Long> {
 
     Optional<Contractor> findByINN(String INN);
 
