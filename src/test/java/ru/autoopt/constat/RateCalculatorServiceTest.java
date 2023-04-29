@@ -6,6 +6,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.autoopt.constat.config.KonturConfigProperties;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.services.calculators.RateCalculatorService;
+import ru.autoopt.constat.services.calculators.StatusCode;
 import ru.autoopt.constat.util.kontur.KonturConnector;
 import ru.autoopt.constat.util.kontur.enrichers.*;
 
