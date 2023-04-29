@@ -13,13 +13,11 @@ public class TrademarkEnricher implements Enricher {
     private final KonturConnector connector;
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+    public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "trademarks");
 
         Boolean hasTradeMarks = !response.get(0).get("trademarks").isEmpty();
 
         contractorDTO.setHasTradeMarks(hasTradeMarks);
-
-        return contractorDTO;
     }
 }

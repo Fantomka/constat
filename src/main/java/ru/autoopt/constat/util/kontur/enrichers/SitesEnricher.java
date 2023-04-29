@@ -13,7 +13,7 @@ public class SitesEnricher implements Enricher {
     private final KonturConnector connector;
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+    public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "sites");
 
         JsonNode sites = response.get(0).get("sites");
@@ -23,6 +23,5 @@ public class SitesEnricher implements Enricher {
         else hasSites = false;
 
         contractorDTO.setHasSites(hasSites);
-        return contractorDTO;
     }
 }

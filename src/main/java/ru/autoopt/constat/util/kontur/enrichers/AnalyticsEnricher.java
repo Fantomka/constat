@@ -13,7 +13,7 @@ public class AnalyticsEnricher implements Enricher {
     private final KonturConnector connector;
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+    public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "analytics");
 
 
@@ -30,7 +30,5 @@ public class AnalyticsEnricher implements Enricher {
 
         contractorDTO.setCountEmployeesEnough(isCountEmployeesEnough);
         contractorDTO.setHasStateProcurements(hasStateProcurements);
-
-        return contractorDTO;
     }
 }

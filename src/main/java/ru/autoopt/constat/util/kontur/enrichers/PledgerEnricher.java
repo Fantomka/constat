@@ -13,13 +13,11 @@ public class PledgerEnricher implements Enricher {
     private final KonturConnector connector;
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+    public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "pledger");
 
         Boolean hasLeasing = response.get(0).get("pledges").isEmpty();
 
         contractorDTO.setIsLeasingOk(hasLeasing);
-
-        return contractorDTO;
     }
 }

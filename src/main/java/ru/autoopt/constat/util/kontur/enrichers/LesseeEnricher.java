@@ -13,13 +13,11 @@ public class LesseeEnricher implements Enricher {
     private final KonturConnector connector;
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+    public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "lessee");
 
         Boolean hasLeasing = response.get(0).get("contracts").isEmpty();
 
         contractorDTO.setIsLeasingOk(hasLeasing);
-
-        return contractorDTO;
     }
 }

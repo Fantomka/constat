@@ -18,7 +18,7 @@ public class PetitionersOfArbitrationEnricher implements Enricher {
 
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+    public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "petitionersOfArbitration");
 
         Iterator<JsonNode> petitioners = response.get(0).get("petitioners").elements();
@@ -36,7 +36,5 @@ public class PetitionersOfArbitrationEnricher implements Enricher {
         Boolean isSumPetitionersOfArbitrationOk = (sum / contractorDTO.getRevenue()) * 100 < 10;
 
         contractorDTO.setIsSumPetitionersOfArbitrationOk(isSumPetitionersOfArbitrationOk);
-
-        return contractorDTO;
     }
 }
