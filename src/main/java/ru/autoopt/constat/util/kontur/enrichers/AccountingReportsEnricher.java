@@ -25,7 +25,7 @@ public class AccountingReportsEnricher implements Enricher {
         JsonNode accountingReport = buhForms.get(buhForms.size() - 1);
 
         ArrayNode form1 = (ArrayNode) accountingReport.get("form1");
-        ArrayNode form2 = (ArrayNode) accountingReport.get("form1");
+        ArrayNode form2 = (ArrayNode) accountingReport.get("form2");
 
         Iterator<JsonNode> iter1 = form1.elements();
         Iterator<JsonNode> iter2 = form2.elements();

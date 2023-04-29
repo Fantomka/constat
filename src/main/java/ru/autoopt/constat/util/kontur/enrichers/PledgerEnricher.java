@@ -16,8 +16,8 @@ public class PledgerEnricher implements Enricher {
     public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "pledger");
 
-        Boolean hasLeasing = response.get(0).get("pledges").isEmpty();
+        Boolean isPledgesOk = response.get(0).get("pledges").isEmpty();
 
-        contractorDTO.setIsLeasingOk(hasLeasing);
+        contractorDTO.setIsPledgesOk(isPledgesOk);
     }
 }
