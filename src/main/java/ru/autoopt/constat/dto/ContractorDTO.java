@@ -91,10 +91,4 @@ public class ContractorDTO {
             this.INN = INN;
         }
     }
-
-    public void setRate(int rate) {
-        if(this.rate == 0) {
-            this.rate = rate;
-        }
-    }
 }
