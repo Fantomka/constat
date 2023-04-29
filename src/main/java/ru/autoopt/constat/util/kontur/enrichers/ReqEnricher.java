@@ -1,21 +1,23 @@
 package ru.autoopt.constat.util.kontur.enrichers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.util.kontur.KonturConnector;
 
 import static ru.autoopt.constat.util.common.CommonHelper.dateIsBefore2022_07_01;
 import static ru.autoopt.constat.util.common.CommonHelper.getString;
 
+@Component
+@AllArgsConstructor
 public class ReqEnricher implements Enricher {
-    @Override
-    public String getApiMethod() {
-        return "req";
-    }
+
+    private final KonturConnector connector;
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO, KonturConnector connector) {
-        JsonNode response = connector.getApi(contractorDTO, getApiMethod());
+    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+        JsonNode response = connector.getApi(contractorDTO, "req");
 
         String orgName = getString(response.get(0).get("UL").get("legalName").get("full"));
         Boolean foundingDate = dateIsBefore2022_07_01(response.get(0).get("UL").get("registrationDate"));

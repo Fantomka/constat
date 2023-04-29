@@ -1,6 +1,8 @@
 package ru.autoopt.constat.util.kontur.enrichers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.util.kontur.KonturConnector;
 
@@ -8,15 +10,16 @@ import java.util.Iterator;
 
 import static ru.autoopt.constat.util.common.CommonHelper.dateIsBefore2022_07_01;
 
+@Component
+@AllArgsConstructor
 public class PetitionersOfArbitrationEnricher implements Enricher {
-    @Override
-    public String getApiMethod() {
-        return "petitionersOfArbitration";
-    }
+
+    private final KonturConnector connector;
+
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO, KonturConnector connector) {
-        JsonNode response = connector.getApi(contractorDTO, getApiMethod());
+    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+        JsonNode response = connector.getApi(contractorDTO, "petitionersOfArbitration");
 
         Iterator<JsonNode> petitioners = response.get(0).get("petitioners").elements();
 
