@@ -1,9 +1,12 @@
 package ru.autoopt.constat.util.calculators;
 
 public enum StatusCode {
-    REORGANIZATION,
-    SUCCESSFULLY,
-    FOUND_DATE_LATE,
-    MASS_ORG_ADDRESS
 
+    // Успешные коды
+    SUCCESSFULLY,
+    MASS_ORG_ADDRESS,
+
+    // Коды с досрочным выходом
+    FOUND_DATE_LATE,
+    REORGANIZATION
 }
