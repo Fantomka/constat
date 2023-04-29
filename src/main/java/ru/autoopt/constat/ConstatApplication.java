@@ -1,12 +1,8 @@
 package ru.autoopt.constat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
 import ru.autoopt.constat.config.KonturConfigProperties;
 
 @SpringBootApplication
@@ -17,18 +13,4 @@ public class ConstatApplication {
         SpringApplication.run(ConstatApplication.class, args);
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-
-    @Bean
-    public RestTemplate restTemplate() {
-         return new RestTemplate();
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
 }

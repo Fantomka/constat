@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.models.Contractor;
 import ru.autoopt.constat.repositories.ContractorRepository;
-import ru.autoopt.constat.util.kontur.KonturConnector;
+import ru.autoopt.constat.services.calculators.RateCalculatorService;
 
 import java.util.*;
 
@@ -19,7 +19,6 @@ import java.util.*;
 public class ContractorService {
 
     private final ContractorRepository contractorRepository;
-    private final KonturConnector konturConnector;
     private final ModelMapper modelMapper;
 
     public List<ContractorDTO> index() {
