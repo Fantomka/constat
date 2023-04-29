@@ -4,6 +4,6 @@ import ru.autoopt.constat.dto.ContractorDTO;
 
 public interface Enricher {
 
-    ContractorDTO enrich(ContractorDTO contractorDTO);
+    void enrich(ContractorDTO contractorDTO);
 
 }

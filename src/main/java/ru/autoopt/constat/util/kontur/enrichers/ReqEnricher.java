@@ -16,7 +16,7 @@ public class ReqEnricher implements Enricher {
     private final KonturConnector connector;
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+    public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "req");
 
         String orgName = getString(response.get(0).get("UL").get("legalName").get("full"));
@@ -38,7 +38,5 @@ public class ReqEnricher implements Enricher {
         contractorDTO.setIsStatusOk(isStatusOk);
         contractorDTO.setHasMassOrgAddress(hasMassOrgAddress);
         contractorDTO.setLastHeadChangeDateOk(lastHeadChangeDateOk);
-
-        return contractorDTO;
     }
 }

@@ -16,7 +16,7 @@ public class AccountingReportsEnricher implements Enricher {
     private final KonturConnector connector;
 
     @Override
-    public ContractorDTO enrich(ContractorDTO contractorDTO) {
+    public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "accountingReports");
 
 
@@ -100,6 +100,5 @@ public class AccountingReportsEnricher implements Enricher {
         contractorDTO.setIsGrossProfitOk(isGrossProfitOk);
         contractorDTO.setIsNetIncomeOk(isNetIncomeOk);
 
-        return contractorDTO;
     }
 }
