@@ -1,4 +1,4 @@
-package ru.autoopt.constat.util.calculators;
+package ru.autoopt.constat.services.calculators;
 
 public enum StatusCode {
 

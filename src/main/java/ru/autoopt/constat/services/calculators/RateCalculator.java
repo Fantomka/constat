@@ -1,13 +1,12 @@
-package ru.autoopt.constat.util.calculators;
+package ru.autoopt.constat.services.calculators;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.autoopt.constat.dto.ContractorDTO;
-import ru.autoopt.constat.util.kontur.KonturConnector;
 import ru.autoopt.constat.util.kontur.enrichers.*;
 
 
-@Component
+@Service
 @AllArgsConstructor
 public class RateCalculator implements Calculator {
 
