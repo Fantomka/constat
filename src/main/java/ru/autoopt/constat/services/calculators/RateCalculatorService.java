@@ -31,13 +31,13 @@ public class RateCalculatorService implements Calculator {
             return StatusCode.FOUND_DATE_LATE;
         }
 
+        accountingReportsEnricher.enrich(contractorDTO);
         sitesEnricher.enrich(contractorDTO);
         trademarkEnricher.enrich(contractorDTO);
         pledgerEnricher.enrich(contractorDTO);
         petitionersOfArbitrationEnricher.enrich(contractorDTO);
         lesseeEnricher.enrich(contractorDTO);
         analyticsEnricher.enrich(contractorDTO);
-        accountingReportsEnricher.enrich(contractorDTO);
 
         addRate(contractorDTO, contractorDTO.getCountEmployeesEnough() ? 5 : -5);
         addRate(contractorDTO, contractorDTO.getHasSites() ? 1 : 0);
