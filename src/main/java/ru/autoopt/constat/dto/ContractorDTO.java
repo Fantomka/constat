@@ -41,6 +41,8 @@ public class ContractorDTO {
     private Boolean hasMassOrgAddress;
 
     // Имеет ли сайты
+    private String site;
+
     private Boolean hasSites;
 
     // Дата изменения собственника до 01.07.2022
@@ -54,7 +56,7 @@ public class ContractorDTO {
     private Boolean isRevenueOk;
 
     // Выручка
-    private Double revenue;
+    private long revenue;
 
     // Имеется ли лизинг
     private Boolean isLeasingOk;

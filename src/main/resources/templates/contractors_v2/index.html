@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -43,7 +43,7 @@
                                 <a class="nav-link active" data-toggle="tab" href="#newUser">Client Verification</a>
                             </li>
                         </ul>
-                        <div class="tab-content">
+                        <div th:object="${contractor}" class="tab-content">
                             <div class="form-group">
                                 <div class="control-group required">
                                     <div class="card">
@@ -53,11 +53,15 @@
                                                 <form id="formNewUser" name="formNewUser">
                                                     <p>
                                                         <label class="container-fluid" for="newInn"><strong>INN</strong>
-                                                            <input class="form-control" type="text" name="inn" id="newInn"/>
+                                                            <input class="form-control" type="text" th:field="*{INN}" name="inn" id="newInn"/>
                                                         </label>
+                                                    <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
                                                     </p>
-                                                    <button type="submit" id="newUserButton" class="btn btn-success">Counterparty Verification</button>
+                                                    <button formmethod="POST" formaction="/contractors/new" value="" type="submit" id="newUserButton" class="btn btn-success">Counterparty Verification</button>
                                                 </form>
+                                            </div>
+                                            <div th:if="${text}">
+                                                <span th:text></span>
                                             </div>
                                         </div>
                                     </div>

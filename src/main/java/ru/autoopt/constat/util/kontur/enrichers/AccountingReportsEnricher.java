@@ -64,21 +64,21 @@ public class AccountingReportsEnricher implements Enricher {
 
         }
 
-        Double revenue = null;
-        Double grossProfit = null;
-        Double netIncome = null;
+        Long revenue = null;
+        Long grossProfit = null;
+        Long netIncome = null;
 
         while (iter2.hasNext()) {
             JsonNode elem = iter2.next();
 
             if (elem.get("code").intValue() == 2110)
-                revenue = elem.get("endValue").asDouble();
+                revenue = elem.get("endValue").asLong();
 
             if (elem.get("code").intValue() == 2100)
-                grossProfit = elem.get("endValue").asDouble();
+                grossProfit = elem.get("endValue").asLong();
 
             if (elem.get("code").intValue() == 2400)
-                netIncome = elem.get("endValue").asDouble();
+                netIncome = elem.get("endValue").asLong();
         }
 
         // Просчитываем все поля с формулами

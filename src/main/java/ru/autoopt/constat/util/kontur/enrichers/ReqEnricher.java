@@ -32,7 +32,7 @@ public class ReqEnricher implements Enricher {
 
         Boolean lastHeadChangeDateOk = dateIsBefore2022_07_01(response.get(0).get("UL").get("heads").get(0).get("firstDate"));
 
-
+        contractorDTO.setFocusHref(getString(response.get(0).get("focusHref")));
         contractorDTO.setOrgName(orgName);
         contractorDTO.setFoundingDateOk(foundingDate);
         contractorDTO.setIsStatusOk(isStatusOk);

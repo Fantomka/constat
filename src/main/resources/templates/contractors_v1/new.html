@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый контрагент</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/contractors/new}" th:object="${contractor}">
+    <label for="INN">Введите ИНН:</label>
+    <input type="text" th:field="*{INN}" id="INN"/>
+    <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
+    <input type="submit" value="Проверить!"/>
+</form>
+<br/>
+<hr>
+<div th:object="${contractor}">
+    <div th:if="${contractor.getRate() != null}">
+        <label for="rate">Балл скоринга:</label>
+        <span id="rate" th:text="${contractor.getRate()}">Балл скоринга</span>
+    </div>
+    <div th:if="${contractor.getSite() != null}">
+        <a th:href="|https://${contractor.getSite()}|" th:text="${contractor.getOrgName()}">VALUE</a>
+    </div>
+    <div th:if="${contractor.getSite() == null}">
+        <span th:text="${contractor.getOrgName()}">VALUE</span>
+    </div>
+    <div th:if="${contractor.getFocusHref() != null}">
+        <a th:href="${contractor.getFocusHref()}" th:text="${contractor.getFocusHref()}">VALUE</a>
+    </div>
+</div>
+
+<br/>
+<hr>
+
+<div th:if="${text}">
+    <div th:if="${!text.isEmpty()}">
+        <div th:each="msg: ${text}">
+            <span th:text="${msg}">текст с результатом</span>
+        </div>
+    </div>
+</div>
+
+<form method="GET" action="/contractors">
+    <input type="submit" value="На главное меню"/>
+</form>
+
+</body>
+</html>

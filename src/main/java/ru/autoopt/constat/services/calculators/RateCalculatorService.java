@@ -39,21 +39,21 @@ public class RateCalculatorService implements Calculator {
         lesseeEnricher.enrich(contractorDTO);
         analyticsEnricher.enrich(contractorDTO);
 
-        addRate(contractorDTO, contractorDTO.getCountEmployeesEnough() ? 5 : -5);
-        addRate(contractorDTO, contractorDTO.getHasSites() ? 1 : 0);
-        addRate(contractorDTO, contractorDTO.getLastHeadChangeDateOk() ? 1 : -5);
-        addRate(contractorDTO, contractorDTO.getIsRevenueOk() ? 5 : -10);
-        addRate(contractorDTO, contractorDTO.getIsLeasingOk() ? 3 : 0);
-        addRate(contractorDTO, contractorDTO.getHasStateProcurements() ? 3 : 0);
-        addRate(contractorDTO, contractorDTO.getIsPledgesOk() ? 3 : 0);
-        addRate(contractorDTO, contractorDTO.getHasTradeMarks() ? 3 : 0);
-        addRate(contractorDTO, contractorDTO.getIsSumPetitionersOfArbitrationOk() ? 0 : -10);
-        addRate(contractorDTO, contractorDTO.getIsMainFoundOk() ? 1 : 0);
-        addRate(contractorDTO, contractorDTO.getIsStockIndustryOk() ? 5 : -5);
-        addRate(contractorDTO, contractorDTO.getIsReceivablesOk() ? 3 : -3);
-        addRate(contractorDTO, contractorDTO.getIsAccountsPayableOk() ? 5 : -10);
-        addRate(contractorDTO, contractorDTO.getIsGrossProfitOk() ? 3 : -3);
-        addRate(contractorDTO, contractorDTO.getIsNetIncomeOk() ? 3 : -3);
+        addRate(contractorDTO, checkCondition(contractorDTO.getCountEmployeesEnough()) ? 5 : -5);
+        addRate(contractorDTO, checkCondition(contractorDTO.getHasSites()) ? 1 : 0);
+        addRate(contractorDTO, checkCondition(contractorDTO.getLastHeadChangeDateOk()) ? 1 : -5);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsRevenueOk()) ? 5 : -10);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsLeasingOk()) ? 3 : 0);
+        addRate(contractorDTO, checkCondition(contractorDTO.getHasStateProcurements()) ? 3 : 0);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsPledgesOk()) ? 3 : 0);
+        addRate(contractorDTO, checkCondition(contractorDTO.getHasTradeMarks()) ? 3 : 0);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsSumPetitionersOfArbitrationOk()) ? 0 : -10);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsMainFoundOk()) ? 1 : 0);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsStockIndustryOk()) ? 5 : -5);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsReceivablesOk()) ? 3 : -3);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsAccountsPayableOk()) ? 5 : -10);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsGrossProfitOk()) ? 3 : -3);
+        addRate(contractorDTO, checkCondition(contractorDTO.getIsNetIncomeOk()) ? 3 : -3);
 
         if (contractorDTO.getHasMassOrgAddress()) {
             return StatusCode.MASS_ORG_ADDRESS;
@@ -65,6 +65,12 @@ public class RateCalculatorService implements Calculator {
 
     private void addRate(ContractorDTO contractorDTO, int value) {
         contractorDTO.setRate(contractorDTO.getRate() + value);
+    }
+
+    private boolean checkCondition(Boolean boolValue) {
+        if (boolValue != null) {
+            return boolValue.booleanValue();
+        } else return false;
     }
 
 }
