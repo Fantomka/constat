@@ -1,7 +1,7 @@
 package ru.autoopt.constat.controllers;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,43 +9,47 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.autoopt.constat.models.Contractor;
+import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.services.ContractorService;
 import ru.autoopt.constat.util.validators.ContractorValidator;
 
+import java.math.BigDecimal;
+
 @Controller
 @RequestMapping("/contractors")
+@AllArgsConstructor
 public class ContractorController {
 
     private final ContractorService contractorService;
     private final ContractorValidator contractorValidator;
 
-    @Autowired
-    public ContractorController(ContractorService contractorService, ContractorValidator contractorValidator) {
-        this.contractorService = contractorService;
-        this.contractorValidator = contractorValidator;
-    }
-
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("contractors", contractorService.index());
-
-        return "contractors/index";
+    public String index(@ModelAttribute("contractor") ContractorDTO contractor) {
+        System.out.println();
+        return "contractors_v1/index";
     }
 
     @GetMapping("/new")
-    public String newPerson(@ModelAttribute("contractor") Contractor contractor) {
-        return "contractors/new";
+    public String newContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
+        return "contractors_v1/new";
     }
 
-    @PostMapping()
-    public String create(@ModelAttribute("contractor") @Valid Contractor contractor, BindingResult bindingResult) {
+    @PostMapping("/new")
+    public String newContractor(
+            Model model,
+            @ModelAttribute("contractor") @Valid ContractorDTO contractor,
+            BindingResult bindingResult
+    ) {
+        System.out.println("new contractor");
+
         contractorValidator.validate(contractor, bindingResult);
-
         if (bindingResult.hasErrors())
-            return "contractors/new";
+            return "contractors_v1/new";
 
-        contractorService.save(contractor);
-        return "redirect:contractors";
+        contractor.setRate(0);
+        model.addAttribute("text", contractorService.counterpartyVerification(contractor));
+
+        //contractorService.save(contractor);
+        return "contractors_v1/new";
     }
 }
