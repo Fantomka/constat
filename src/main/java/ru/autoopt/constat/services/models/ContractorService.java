@@ -1,4 +1,4 @@
-package ru.autoopt.constat.services;
+package ru.autoopt.constat.services.models;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -48,20 +48,18 @@ public class ContractorService {
         StatusCode statusCode = calculator.calculate(contractorDTO);
         int periodByAreaCode = staticInfoService.getValue(StatInfoType.REGION_RU, contractorDTO.getINN().substring(0, 2), Integer.class);
 
-        if(contractorDTO.getRate() >= 11 && contractorDTO.getRate() <= 20) {
-            int limitPeriod = Math.max(periodByAreaCode, 7);
-            long limitAmount = (contractorDTO.getRevenue() / 365) * (limitPeriod/4);
-            result.add("Кредит разрешен на " + limitPeriod + " дней, сумма - " + format.format(limitAmount) + "\n");
-        } else if (contractorDTO.getRate() >= 21 && contractorDTO.getRate() <= 35) {
-            int limitPeriod = Math.max(periodByAreaCode, 14);
-            long limitAmount = (contractorDTO.getRevenue()/365) * (limitPeriod/4);
-            result.add("Кредит разрешен на " + limitPeriod + " дней, сумма - " + format.format(limitAmount) + "\n");
-        } else if (contractorDTO.getRate() >= 36 && contractorDTO.getRate() <= 50) {
-            int limitPeriod = Math.max(periodByAreaCode, 45);
-            long limitAmount = (contractorDTO.getRevenue()/365) * (limitPeriod/4);
-            result.add("Кредит разрешен на " + limitPeriod + " дней, сумма - " + format.format(limitAmount) + "\n");
-        } else if (contractorDTO.getRate() <= 10) {
+        int limitPeriod = 0;
+
+        if (contractorDTO.getRate() <= 10) {
             result.add("Кредит не разрешен - только полная предоплата ! \n");
+        } else if (contractorDTO.getRate() <= 20) limitPeriod = Math.max(periodByAreaCode, 7);
+        else if (contractorDTO.getRate() <= 35) limitPeriod = Math.max(periodByAreaCode, 14);
+        else if (contractorDTO.getRate() <= 50) limitPeriod = Math.max(periodByAreaCode, 45);
+
+
+        if (contractorDTO.getRate() > 10) {
+            long limitAmount = (contractorDTO.getRevenue()/365) * (limitPeriod/4);
+            result.add("Кредит разрешен на " + limitPeriod + " дней, сумма - " + format.format(limitAmount) + "\n");
         }
 
         if (statusCode != StatusCode.SUCCESSFULLY) {

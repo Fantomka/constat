@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.autoopt.constat.dto.ContractorDTO;
-import ru.autoopt.constat.services.ContractorService;
+import ru.autoopt.constat.services.models.ContractorService;
 import ru.autoopt.constat.util.validators.ContractorValidator;
-
-import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/contractors")

@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "contractor_rating")
 @NoArgsConstructor
@@ -26,6 +28,9 @@ public class Contractor {
 
     @Column(name = "rate")
     private int rate;
+
+    @OneToMany(mappedBy = "contractor")
+    private List<ContractRecord> contracts;
 
     public Contractor(String INN, int rate) {
         this.INN = INN;
