@@ -47,16 +47,26 @@ public class ContractorService {
         int periodByAreaCode = staticInfoService.getValue(StatInfoType.REGION_RU, contractorDTO.getINN().substring(0, 2), Integer.class);
 
         int limitPeriod = 0;
+        int limitPeriodDenominator = 1;
 
         if (contractorDTO.getRate() <= 10) {
             result.add("Кредит не разрешен - только полная предоплата ! \n");
-        } else if (contractorDTO.getRate() <= 20) limitPeriod = Math.max(periodByAreaCode, 7);
-        else if (contractorDTO.getRate() <= 35) limitPeriod = Math.max(periodByAreaCode, 14);
-        else if (contractorDTO.getRate() <= 50) limitPeriod = Math.max(periodByAreaCode, 45);
+        } else if (contractorDTO.getRate() <= 20)  {
+            limitPeriod = Math.max(periodByAreaCode, 7);
+            limitPeriodDenominator = 4;
+        }
+        else if (contractorDTO.getRate() <= 35)  {
+            limitPeriod = Math.max(periodByAreaCode, 14);
+            limitPeriodDenominator = 3;
+        }
+        else if (contractorDTO.getRate() <= 50)  {
+            limitPeriod = Math.max(periodByAreaCode, 45);
+            limitPeriodDenominator = 2;
+        }
 
 
         if (contractorDTO.getRate() > 10) {
-            long limitAmount = (contractorDTO.getRevenue()/365) * (limitPeriod/4);
+            long limitAmount = contractorDTO.getRevenue() / 365 * limitPeriod / limitPeriodDenominator;
             result.add("Кредит разрешен на " + limitPeriod + " дней, сумма - " + format.format(limitAmount) + "\n");
         }
 
