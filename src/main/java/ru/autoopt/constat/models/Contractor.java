@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "contractor_rating")
-@NoArgsConstructor
-@Data
 public class Contractor {
 
     @Id
@@ -32,8 +31,56 @@ public class Contractor {
     @OneToMany(mappedBy = "contractor")
     private List<ContractRecord> contracts;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getINN() {
+        return INN;
+    }
+
+    public void setINN(String INN) {
+        this.INN = INN;
+    }
+
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
+
+    public List<ContractRecord> getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(List<ContractRecord> contracts) {
+        this.contracts = contracts;
+    }
+
+    public Contractor() {
+    }
+
     public Contractor(String INN, int rate) {
         this.INN = INN;
         this.rate = rate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contractor that = (Contractor) o;
+        return rate == that.rate && id.equals(that.id) && INN.equals(that.INN) && Objects.equals(contracts, that.contracts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, INN, rate, contracts);
     }
 }

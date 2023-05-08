@@ -12,8 +12,6 @@ import ru.autoopt.constat.services.calculators.StatusCode;
 import ru.autoopt.constat.services.statinfo.StatInfoType;
 import ru.autoopt.constat.services.statinfo.StaticInfoService;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.*;
 
