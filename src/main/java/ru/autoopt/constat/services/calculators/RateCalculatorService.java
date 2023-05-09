@@ -68,9 +68,8 @@ public class RateCalculatorService implements Calculator {
     }
 
     private boolean checkCondition(Boolean boolValue) {
-        if (boolValue != null) {
-            return boolValue.booleanValue();
-        } else return false;
+        if (boolValue != null) return boolValue;
+        else return false;
     }
 
 }

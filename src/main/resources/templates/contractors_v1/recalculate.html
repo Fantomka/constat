@@ -2,36 +2,48 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Книга</title>
+    <title>Пересчёт условий по кредиту</title>
 </head>
 <body>
 
-<form th:method="POST" th:action="@{/books/search}">
-    <label for="query">Введите поисковый запрос:</label>
-    <input type="text" th:name="search_query" id="query"/>
-    <br/>
-    <input type="submit" value="Искать!"/>
+
+<form th:method="POST" th:action="@{/contractors/recalculate}" th:object="${contractor}">
+    <label for="INN">Введите ИНН:</label>
+    <input type="text" th:field="*{INN}" id="INN"/>
+    <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
+    <input type="submit" value="Пересчитать!"/>
 </form>
 
-<div th:if="${books}">
-    <div th:if="${books.isEmpty()}">
-        <span>Книг не найдено</span>
-    </div>
-
-    <div th:each="book: ${books}">
-        <a th:href="@{/books/{id}(id=${book.getId()})}" th:text="|${book.getTitle()}, ${book.getAuthor()}, ${book.getYear()}">VALUE</a>
-        <div th:if="${book.getOwner() != null}">
-            <span> Книга сейчас у:</span> <a th:href="@{/people/{id}(id=${book.getOwner.getId()})}" th:text="${book.getOwner.getFullName()}">Person name</a>
+<div th:object="${contractor}">
+    <div th:if="contractor">
+        <br/>
+        <hr>
+        <div th:if="${contractor.getSite() != null}">
+            <a th:href="|https://${contractor.getSite()}|" th:text="${contractor.getOrgName()}">VALUE</a>
         </div>
-
-        <div th:if="${book.getOwner() == null}">
-            <span> Книга свободна</span>
+        <div th:if="${contractor.getSite() == null}">
+            <span th:text="${contractor.getOrgName()}">VALUE</span>
+        </div>
+        <div th:if="${contractor.getFocusHref() != null}">
+            <a th:href="${contractor.getFocusHref()}" th:text="${contractor.getFocusHref()}">VALUE</a>
         </div>
     </div>
 </div>
 
-<form method="GET" action="/books">
-    <input type="submit" value="Посмотреть книги"/>
+<div th:if="${text}">
+    <br/>
+    <hr>
+    <div th:if="${!text.isEmpty()}">
+        <div th:each="msg: ${text}">
+            <span th:text="${msg}">текст с результатом</span>
+        </div>
+    </div>
+    <br/>
+    <hr>
+</div>
+
+<form method="GET" action="/contractors">
+    <input type="submit" value="На главное меню"/>
 </form>
 
 </body>

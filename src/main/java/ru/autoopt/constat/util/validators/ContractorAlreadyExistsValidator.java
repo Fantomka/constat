@@ -6,16 +6,16 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.models.Contractor;
-import ru.autoopt.constat.services.ContractorService;
+import ru.autoopt.constat.services.models.ContractorService;
 
 
 @Component
-public class ContractorValidator implements Validator {
+public class ContractorAlreadyExistsValidator implements Validator {
 
     private final ContractorService contractorService;
 
     @Autowired
-    public ContractorValidator(ContractorService contractorService) {
+    public ContractorAlreadyExistsValidator(ContractorService contractorService) {
         this.contractorService = contractorService;
     }
 
