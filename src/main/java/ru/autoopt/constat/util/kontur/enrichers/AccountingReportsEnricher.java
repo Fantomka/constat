@@ -84,11 +84,11 @@ public class AccountingReportsEnricher implements Enricher {
         // Просчитываем все поля с формулами
 
         Boolean isRevenueOk = revenue > 120000;
-        Boolean isStockIndustryOk = (revenue / ((stockIndustryStart + stockIndustryEnd) / 2)) > 3;
-        Boolean isReceivablesOk = (revenue / ((receivablesStart + receivablesEnd) / 2)) > 12;
-        Boolean isAccountsPayableOk = (revenue / ((accountsPayableStart + accountsPayableEnd) / 2)) > 2.5;
-        Boolean isGrossProfitOk  = (grossProfit / revenue) * 100 > 5;
-        Boolean isNetIncomeOk = netIncome > 0;
+        Boolean isStockIndustryOk = stockIndustryStart != null && (revenue / ((stockIndustryStart + stockIndustryEnd) / 2)) > 3;
+        Boolean isReceivablesOk =  receivablesStart != null && (revenue / ((receivablesStart + receivablesEnd) / 2)) > 12;
+        Boolean isAccountsPayableOk = accountsPayableStart != null && (revenue / ((accountsPayableStart + accountsPayableEnd) / 2)) > 2.5;
+        Boolean isGrossProfitOk  = grossProfit != null && (grossProfit / revenue) * 100 > 5;
+        Boolean isNetIncomeOk = netIncome != null && netIncome > 0;
 
         // Укладываем результаты в модель
         contractorDTO.setIsRevenueOk(isRevenueOk);

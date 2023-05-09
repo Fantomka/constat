@@ -12,10 +12,11 @@
     <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
     <input type="submit" value="Проверить!"/>
 </form>
-<br/>
-<hr>
+
 <div th:object="${contractor}">
     <div th:if="${contractor.getRate() != null}">
+        <br/>
+        <hr>
         <label for="rate">Балл скоринга:</label>
         <span id="rate" th:text="${contractor.getRate()}">Балл скоринга</span>
     </div>
@@ -30,10 +31,10 @@
     </div>
 </div>
 
-<br/>
-<hr>
 
 <div th:if="${text}">
+    <br/>
+    <hr>
     <div th:if="${!text.isEmpty()}">
         <div th:each="msg: ${text}">
             <span th:text="${msg}">текст с результатом</span>

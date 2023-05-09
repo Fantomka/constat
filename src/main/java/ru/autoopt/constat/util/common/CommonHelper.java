@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CommonHelper {
 
@@ -19,6 +21,12 @@ public class CommonHelper {
             return null;
         }
 
+    }
+
+    public static Date getDatePlusNMonth(int n) {
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.add(Calendar.MONTH, n);
+        return currentDate.getTime();
     }
 
 }

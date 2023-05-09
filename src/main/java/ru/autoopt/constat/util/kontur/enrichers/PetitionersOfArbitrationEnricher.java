@@ -21,6 +21,11 @@ public class PetitionersOfArbitrationEnricher implements Enricher {
     public void enrich(ContractorDTO contractorDTO) {
         JsonNode response = connector.getApi(contractorDTO, "petitionersOfArbitration");
 
+        if (response.get(0).get("petitioners") == null) {
+            contractorDTO.setIsSumPetitionersOfArbitrationOk(true);
+            return;
+        }
+
         Iterator<JsonNode> petitioners = response.get(0).get("petitioners").elements();
 
         Double sum = 0D;

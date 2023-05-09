@@ -20,5 +20,5 @@ CREATE TABLE contracts(
     contractor_id int REFERENCES contractor_rating ON DELETE SET NULL,
     given_at timestamp,
     expires_after int,
-    paid_at int
+    days_overdue int
 );

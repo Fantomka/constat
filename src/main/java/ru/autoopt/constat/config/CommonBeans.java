@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 @Configuration
 public class CommonBeans {
 
@@ -22,5 +25,10 @@ public class CommonBeans {
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
+    }
+
+    @Bean
+    public NumberFormat numberFormat() {
+        return NumberFormat.getInstance(new Locale("ru", "RU"));
     }
 }

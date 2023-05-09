@@ -23,7 +23,7 @@ public class ContractRecord {
     @Column(name = "expires_after")
     private int expiresAfter;
 
-    @Column(name = "paid_at")
+    @Column(name = "days_overdue")
     private int daysOverdue;
 
     @ManyToOne(cascade = CascadeType.MERGE)

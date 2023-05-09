@@ -10,12 +10,12 @@ import ru.autoopt.constat.services.models.ContractorService;
 
 
 @Component
-public class ContractorValidator implements Validator {
+public class ContractorAlreadyExistsValidator implements Validator {
 
     private final ContractorService contractorService;
 
     @Autowired
-    public ContractorValidator(ContractorService contractorService) {
+    public ContractorAlreadyExistsValidator(ContractorService contractorService) {
         this.contractorService = contractorService;
     }
 
