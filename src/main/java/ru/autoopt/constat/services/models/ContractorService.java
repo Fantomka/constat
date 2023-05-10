@@ -13,6 +13,9 @@ import ru.autoopt.constat.services.calculators.Calculator;
 import ru.autoopt.constat.services.calculators.StatusCode;
 import ru.autoopt.constat.services.statinfo.StatInfoType;
 import ru.autoopt.constat.services.statinfo.StaticInfoService;
+import ru.autoopt.constat.util.kontur.enrichers.PetitionersOfArbitrationEnricher;
+import ru.autoopt.constat.util.kontur.enrichers.ReqEnricher;
+import ru.autoopt.constat.util.kontur.enrichers.SitesEnricher;
 
 import java.text.NumberFormat;
 import java.util.*;
@@ -27,16 +30,11 @@ public class ContractorService {
     private final ContractorRepository contractorRepository;
     private final ModelMapper modelMapper;
     private final Calculator calculator;
+    private final ReqEnricher reqEnricher;
+    private final PetitionersOfArbitrationEnricher petitionersOfArbitrationEnricher;
     private final StaticInfoService staticInfoService;
+    private final SitesEnricher sitesEnricher;
     private final NumberFormat numberFormat;
-
-    public List<ContractorDTO> index() {
-        List<Contractor> index = contractorRepository.findAll();
-        return index.stream()
-                .map(contractor ->
-                        modelMapper.map(contractor, ContractorDTO.class)
-                ).toList();
-    }
 
     public Optional<Contractor> getContractorByINN(String INN) {
         return contractorRepository.findByINN(INN);
@@ -189,9 +187,27 @@ public class ContractorService {
         return new OverdueResult(numberOfOverduePayments, amountOfOverduePayments);
     }
 
-    @Transactional
-    public void save(Contractor contractor) {
-        contractorRepository.save(contractor);
-    }
+    public List<ContractorDTO> indexContractorsInDangerZone() {
+        List<Contractor> contractors = contractorRepository.findAll();
+        List<ContractorDTO> result = new LinkedList<>();
+        for (Contractor contractor: contractors) {
+            Hibernate.initialize(contractor.getContracts());
+            ContractorDTO contractorDTO = new ContractorDTO();
+            contractorDTO.setINN(contractor.getINN());
 
+            reqEnricher.enrich(contractorDTO);
+            petitionersOfArbitrationEnricher.enrich(contractorDTO);
+            sitesEnricher.enrich(contractorDTO);
+
+            if (
+                !contractorDTO.getIsStatusOk() ||
+                !contractorDTO.getLastHeadChangeDateOk() ||
+                !contractorDTO.getIsSumPetitionersOfArbitrationOk()
+            ) result.add(0, contractorDTO);
+            else if (contractor.getContracts().get(0).getExpiresAfter() >= 30) result.add(contractorDTO);
+        }
+
+
+        return result;
+    }
 }

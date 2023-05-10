@@ -17,7 +17,7 @@ public class ReqEnricher implements Enricher {
 
     @Override
     public void enrich(ContractorDTO contractorDTO) {
-        JsonNode response = connector.getApi(contractorDTO, "req");
+        JsonNode response = connector.getApi(contractorDTO.getINN(), "req");
 
         String orgName = getString(response.get(0).get("UL").get("legalName").get("full"));
         Boolean foundingDate = dateIsBefore2022_07_01(response.get(0).get("UL").get("registrationDate"));

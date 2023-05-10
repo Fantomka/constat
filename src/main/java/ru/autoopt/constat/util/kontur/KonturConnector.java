@@ -26,11 +26,10 @@ public class KonturConnector {
     private final ObjectMapper mapper;
     private final KonturConfigProperties konturConfigProperties;
 
-    public JsonNode getApi(ContractorDTO contractorDTO, String apiMethod) {
+    public JsonNode getApi(String inn, String apiMethod) {
         Map<String, String> params = new HashMap<>();
-        params.put("inn", contractorDTO.getINN());
-        JsonNode response = getRequest(apiMethod, params);
-        return response;
+        params.put("inn", inn);
+        return getRequest(apiMethod, params);
     }
 
     private JsonNode getRequest(String apiMethod, Map<String, String> qParams) {
