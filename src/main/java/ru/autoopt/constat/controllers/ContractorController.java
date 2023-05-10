@@ -22,7 +22,7 @@ public class ContractorController {
 
     @GetMapping()
     public String index(@ModelAttribute("contractor") ContractorDTO contractor) {
-        return "contractors_v1/index";
+        return "contractors_v1/menu";
     }
 
     @GetMapping("/new")
@@ -64,6 +64,14 @@ public class ContractorController {
         contractor.setRate(0);
         model.addAttribute("text", contractorService.recalculate(contractor));
         return "contractors_v1/recalculate";
+    }
+
+    @GetMapping("/check")
+    public String checkContractors(Model model) {
+
+        model.addAttribute("contractors", contractorService.indexContractorsInDangerZone());
+
+        return "contractors_v1/check";
     }
 
 }

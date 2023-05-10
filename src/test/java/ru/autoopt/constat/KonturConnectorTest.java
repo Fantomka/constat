@@ -20,9 +20,7 @@ public class KonturConnectorTest {
                 new KonturConfigProperties("", "")
         );
 
-        ContractorDTO contractorDTO = new ContractorDTO();
-        contractorDTO.setINN("1644015657");
-        JsonNode response = konturConnector.getApi(contractorDTO, "accountingReports");
+        JsonNode response = konturConnector.getApi("1644015657", "accountingReports");
         System.out.println(response);
     }
 
