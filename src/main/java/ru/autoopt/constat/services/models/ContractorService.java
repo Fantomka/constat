@@ -40,10 +40,11 @@ public class ContractorService {
         return contractorRepository.findByINN(INN);
     }
 
-    public List<String> counterpartyVerification(ContractorDTO contractorDTO) {
+    public record OverdueResult(int numberOfOverduePayments, int amountOfOverduePayments) {}
 
+    public StatementForm counterpartyVerification(ContractorDTO contractorDTO) {
 
-        List<String> result = new ArrayList<>();
+        StatementForm result = new StatementForm();
 
         StatusCode statusCode = calculator.calculate(contractorDTO);
         int periodByAreaCode = staticInfoService.getValue(StatInfoType.REGION_RU, contractorDTO.getINN().substring(0, 2), Integer.class);
@@ -53,7 +54,7 @@ public class ContractorService {
         int limitPeriodDenominator = 1;
 
         if (rate <= 10) {
-            result.add("Кредит не разрешен - только полная предоплата ! \n");
+            result.getAdditionalWarnings().add("Кредит не разрешен - только полная предоплата ! \n");
         } else if (rate <= 20)  {
             limitPeriod = Math.max(periodByAreaCode, 7);
             limitPeriodDenominator = 4;
@@ -70,28 +71,29 @@ public class ContractorService {
 
         if (rate > 10) {
             long limitAmount = contractorDTO.getRevenue() / 365 * limitPeriod / limitPeriodDenominator;
-            result.add("Кредит разрешен на " + limitPeriod + " дней, сумма - " + numberFormat.format(limitAmount) + "\n");
+            result.setResultString("Кредит разрешен на " + limitPeriod + " дней, сумма - " + numberFormat.format(limitAmount) + "\n");
         }
 
         if (statusCode != StatusCode.SUCCESSFULLY) {
-            result.add(staticInfoService.getValue(StatInfoType.STATUS_CODE_MESSAGES, statusCode.name(), String.class));
+            result.getAdditionalWarnings().add(staticInfoService.getValue(StatInfoType.STATUS_CODE_MESSAGES, statusCode.name(), String.class));
         }
 
         return result;
     }
 
-    public List<String> recalculate(ContractorDTO contractorDTO) {
+    public StatementForm recalculate(ContractorDTO contractorDTO) {
+
+        StatementForm result = new StatementForm();
+
         Contractor contractor = contractorRepository.findByINN(contractorDTO.getINN()).get();
         Hibernate.initialize(contractor.getContracts());
         calculator.calculate(contractorDTO);
 
-        List<String> result = new ArrayList<>();
-
         int primaryRate = contractor.getRate();
         int secondaryRate = contractorDTO.getRate();
 
-        result.add("Предыдущий балл скоринга: " + primaryRate);
-        result.add("Текущий балл скоринга: " + secondaryRate);
+        result.getAdditionalInfo().add("Предыдущий балл скоринга: " + primaryRate);
+        result.getAdditionalInfo().add("Текущий балл скоринга: " + secondaryRate);
 
         int scoring = 0;
         int nMonth;
@@ -101,12 +103,12 @@ public class ContractorService {
         int creditPaymentTerm = contractor.getContracts().get(0).getExpiresAfter();
 
         if (secondaryRate <= 10) {
-            result.add("Требуется полная предоплата по текущему скорингу.");
+            result.getAdditionalWarnings().add("Требуется полная предоплата по текущему скорингу.");
             return result;
         }
 
         if (contractor.getContracts().get(contractor.getContracts().size()-1).getDaysOverdue() >= 30) {
-            result.add("Требуется полная предоплата по причине просрочки более 30 дней при последнем выдаче кредита");
+            result.getAdditionalWarnings().add("Требуется полная предоплата по причине просрочки более 30 дней при последнем выдаче кредита");
             return result;
         }
 
@@ -122,13 +124,13 @@ public class ContractorService {
         OverdueResult countResult = countOverdues(contractor, nMonth);
         if (countResult.numberOfOverduePayments() < numberOfOverduePaymentsLimit) scoring += 2;
         else {
-            result.add("Отказано в увеличении суммы лимита по причине большого количества просрочек");
+            result.getAdditionalWarnings().add("Отказано в увеличении суммы лимита по причине большого количества просрочек");
             return result;
         }
 
         if (countResult.amountOfOverduePayments() <= amountOfOverduePaymentsLimit) scoring += 2;
         else {
-            result.add("Отказано в увеличении суммы лимита по причине длительности просрочек");
+            result.getAdditionalWarnings().add("Отказано в увеличении суммы лимита по причине длительности просрочек");
             return result;
         }
 
@@ -143,7 +145,7 @@ public class ContractorService {
 
         double limitPeriodDenominator = 0;
 
-        result.add("Оценка пересмотра условий кредитования: " + scoring);
+        result.getAdditionalInfo().add("Оценка пересмотра условий кредитования: " + scoring);
 
         if (scoring == 3 || scoring == 4) {
             if (secondaryRate <= 20) limitPeriodDenominator = 3.8;
@@ -157,7 +159,7 @@ public class ContractorService {
 
 
         double limitAmount = (double) contractorDTO.getRevenue() / 365 * creditPaymentTerm / limitPeriodDenominator;
-        result.add("Кредит разрешен на " + creditPaymentTerm + " дней, сумма - " + numberFormat.format(Math.ceil(limitAmount)) + "\n");
+        result.setResultString("Кредит разрешен на " + creditPaymentTerm + " дней, сумма - " + numberFormat.format(Math.ceil(limitAmount)) + "\n");
         return result;
     }
 
