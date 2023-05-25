@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Главное меню</title>
+    <meta name="description" content="Главное меню">
+    <link rel="stylesheet" th:href="@{styles/css/style.css}">
 </head>
 <body>
-<hr>
-<form th:align="center" method="GET" action="/contractors/new">
-    <input type="submit" value="Проверить нового контрагента"/>
-</form>
-<hr>
 
-<form th:align="center" method="GET" action="/contractors/recalculate">
-    <input type="submit" value="Пересчитать старого контрагента"/>
-</form>
+<div id="wrapper">
+    <div id="main">
+        <div id="content" role="main">
+            <div class="entry-content">
+                <h1>КЛП</h1>
+                <h2 th:align="center">Главное меню</h2>
+                <form th:align="center" method="GET" action="/contractors/new">
+                    <input class="pressed-button-menu" type="submit" value="Проверить нового контрагента"/>
+                </form>
 
-<hr>
-<form th:align="center" method="GET" action="/contractors/check">
-    <input type="submit" value="Список потенциально опасных контрагентов"/>
-</form>
+                <form th:align="center" method="GET" action="/contractors/recalculate">
+                    <input class="pressed-button-menu" type="submit" value="Пересчитать старого контрагента"/>
+                </form>
 
+                <form th:align="center" method="GET" action="/contractors/check">
+                    <input class="pressed-button-menu" type="submit" value="Список потенциально опасных контрагентов"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

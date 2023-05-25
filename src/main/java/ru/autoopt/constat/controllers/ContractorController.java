@@ -41,7 +41,7 @@ public class ContractorController {
             return "contractors_v1/new";
 
         contractor.setRate(0);
-        model.addAttribute("text", contractorService.counterpartyVerification(contractor));
+        model.addAttribute("result", contractorService.counterpartyVerification(contractor));
 
         return "contractors_v1/new";
     }
@@ -62,7 +62,7 @@ public class ContractorController {
             return "contractors_v1/recalculate";
 
         contractor.setRate(0);
-        model.addAttribute("text", contractorService.recalculate(contractor));
+        model.addAttribute("result", contractorService.recalculate(contractor));
         return "contractors_v1/recalculate";
     }
 
