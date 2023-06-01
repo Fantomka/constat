@@ -14,7 +14,7 @@ public class AnalyticsEnricher implements Enricher {
 
     @Override
     public void enrich(ContractorDTO contractorDTO) {
-        JsonNode response = connector.getApi(contractorDTO, "analytics");
+        JsonNode response = connector.getApi(contractorDTO.getINN(), "analytics");
 
 
         JsonNode countEmployees = response.get(0).get("analytics").get("q7021");

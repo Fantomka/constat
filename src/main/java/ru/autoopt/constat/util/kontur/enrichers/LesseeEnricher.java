@@ -14,7 +14,7 @@ public class LesseeEnricher implements Enricher {
 
     @Override
     public void enrich(ContractorDTO contractorDTO) {
-        JsonNode response = connector.getApi(contractorDTO, "lessee");
+        JsonNode response = connector.getApi(contractorDTO.getINN(), "lessee");
 
         Boolean hasLeasing = response.get(0).get("contracts").isEmpty();
 

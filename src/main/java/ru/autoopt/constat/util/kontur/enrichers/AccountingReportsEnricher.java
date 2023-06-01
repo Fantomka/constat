@@ -17,7 +17,7 @@ public class AccountingReportsEnricher implements Enricher {
 
     @Override
     public void enrich(ContractorDTO contractorDTO) {
-        JsonNode response = connector.getApi(contractorDTO, "accountingReports");
+        JsonNode response = connector.getApi(contractorDTO.getINN(), "accountingReports");
 
 
         // Вытаскиваем все нужные поля

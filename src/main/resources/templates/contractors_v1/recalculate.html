@@ -3,48 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Пересчёт условий по кредиту</title>
+    <meta name="description" content="Перерасчёт условий контрагента.">
+    <link rel="stylesheet" th:href="@{../styles/css/style.css}">
 </head>
 <body>
 
+<div id="wrapper">
+    <div id="main">
+        <div id="content" role="main">
+            <div class="entry-content">
+                <h1>КЛП</h1>
+                <hr/>
+                <form th:method="POST" th:action="@{/contractors/recalculate}" th:object="${contractor}">
+                    <label for="INN">Введите ИНН:</label>
+                    <input type="text" th:field="*{INN}" id="INN"/>
+                    <input type="submit" value="Пересчитать!"/>
+                    <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
+                </form>
 
-<form th:method="POST" th:action="@{/contractors/recalculate}" th:object="${contractor}">
-    <label for="INN">Введите ИНН:</label>
-    <input type="text" th:field="*{INN}" id="INN"/>
-    <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
-    <input type="submit" value="Пересчитать!"/>
-</form>
+                <div th:object="${contractor}">
+                    <div th:if="${contractor.getFocusHref() != null}">
+                        <hr>
+                        <a th:href="${contractor.getFocusHref()}"
+                           th:text="${contractor.getFocusHref()}">VALUE</a>
+                    </div>
 
-<div th:object="${contractor}">
-    <div th:if="contractor">
-        <br/>
-        <hr>
-        <div th:if="${contractor.getSite() != null}">
-            <a th:href="|https://${contractor.getSite()}|" th:text="${contractor.getOrgName()}">VALUE</a>
-        </div>
-        <div th:if="${contractor.getSite() == null}">
-            <span th:text="${contractor.getOrgName()}">VALUE</span>
-        </div>
-        <div th:if="${contractor.getFocusHref() != null}">
-            <a th:href="${contractor.getFocusHref()}" th:text="${contractor.getFocusHref()}">VALUE</a>
+                    <div th:if="${contractor.getSite() != null}">
+                        <a th:href="|https://${contractor.getSite()}|"
+                           th:text="${contractor.getOrgName()}">VALUE</a>
+                    </div>
+
+                    <div th:if="${contractor.getSite() == null}">
+                        <span th:text="${contractor.getOrgName()}">VALUE</span>
+                    </div>
+
+                </div>
+
+                <div th:if="${result}" th:object="${result}">
+                    <hr>
+                    <div th:if="${!result.getAdditionalInfo().isEmpty()}">
+                        <div th:each="msg: ${result.getAdditionalInfo()}">
+                            <strong th:text="${msg}">текст с результатом</strong>
+                        </div>
+                    </div>
+
+                    <div th:if="${!result.getAdditionalWarnings().isEmpty()}">
+                        <div th:each="msg: ${result.getAdditionalWarnings()}">
+                            <p class="rule" th:text="${msg}">текст с результатом</p>
+                        </div>
+                    </div>
+
+                    <div th:if="${result.resultString != null}">
+                        <p class="link" th:text="${result.getResultString()}">Балл скоринга</p>
+                    </div>
+                </div>
+
+                <div class="definition">
+                    <p>
+                        <dfn>Балл скоринга</dfn> - основа оценки кредитоспособности контрагента, рассчитывается, чтобы
+                        показать уровень благонадежности нового заемщика компании<br>
+                        <dfn>Категории контрагентов по баллам:</dfn>
+                    <ul>
+                        <li>— 0-10 – полная предоплата, ненадежный контрагент;</li>
+                        <li>— 11-20 – контрагент умеренной надежности;</li>
+                        <li>— 21-35 - надежный контрагент;</li>
+                        <li>— 36-50 - идеальный контрагент;</li>
+                    </ul>
+                    Если название компании помечена как ссылка - то при нажатии вас отправит на сайт компании
+                </div>
+
+                <hr/>
+                <form method="GET" action="/contractors">
+                    <input class="pressed-button" type="submit" value="На главное меню"/>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
-<div th:if="${text}">
-    <br/>
-    <hr>
-    <div th:if="${!text.isEmpty()}">
-        <div th:each="msg: ${text}">
-            <span th:text="${msg}">текст с результатом</span>
-        </div>
-    </div>
-    <br/>
-    <hr>
-</div>
-
-<form method="GET" action="/contractors">
-    <input type="submit" value="На главное меню"/>
-</form>
-
 </body>
 </html>

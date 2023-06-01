@@ -1,0 +1,329 @@
+html, body, div, object,
+h1, h2, h3, h4, h5, h6, p,
+big, cite,
+dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+form, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+body {
+    line-height: 1;
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+    clear: both;
+    font-weight: bold;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#content {
+    margin: 0 20px 0 20px;
+}
+
+#wrapper {
+    background: linear-gradient(315deg, #DEECFF 15%, #FFFFFF 15%);
+    margin-top: 20px;
+    margin-bottom: 60px;
+    padding: 0 20px;
+    box-shadow: 5px 10px 5px #333;
+
+}
+
+h1 {
+    font-size: 42px;
+    background: linear-gradient(45deg, #0B1CB7 50%, #0D61BC 50%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h2 {
+    font-size: 32px;
+    background: linear-gradient(45deg, #0B1CB7 50%, #0D61BC 50%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.pressed-button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 10px;
+    background-image: linear-gradient(45deg, #0B1CB7 50%, #0D61BC 50%, #8AA9D6);
+    background-position: 100% 0;
+    background-size: 200% 200%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 100;
+    color: white;
+    transition: .5s;
+}
+
+.pressed-button:hover {
+    box-shadow: 0 0 0 0 rgba(0, 40, 120, 0);
+    background-position: 0 0;
+}
+
+.pressed-button-menu {
+    text-decoration: none;
+    display: inline-block;
+    padding: 12px 40px;
+    margin: 10px 20px;
+    border-radius: 10px;
+    background-image: linear-gradient(45deg, #0B1CB7 20%, #478AD3 50%, #8AA9D6);
+    background-position: 100% 0;
+    background-size: 200% 200%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: white;
+    box-shadow: 0 16px 32px 0 rgba(0, 40, 120, .35);
+    transition: .5s;
+}
+
+.pressed-button-menu:hover {
+    box-shadow: 0 0 0 0 rgba(0, 40, 120, 0);
+    background-position: 0 0;
+}
+
+p {
+    padding: 10px 0;
+
+}
+
+ul {
+    list-style: none;
+    margin: 1.5em 0 1.5em 1.5em;
+}
+
+ol {
+    list-style: decimal;
+    margin: 0 0 18px 1.5em;
+}
+
+ol ol {
+    list-style: upper-alpha;
+}
+
+ol ol ol {
+    list-style: lower-roman;
+}
+
+ol ol ol ol {
+    list-style: lower-alpha;
+}
+
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+    margin-bottom: 0;
+}
+
+dl {
+    margin: 0 0 24px 0;
+}
+
+dt {
+    font-weight: bold;
+}
+
+dd {
+    margin-bottom: 18px;
+}
+
+strong {
+    font-weight: bold;
+    color: #1D32F0;
+}
+
+cite,
+em,
+i {
+    font-style: italic;
+}
+
+big {
+    font-size: 131.25%;
+}
+
+#main {
+    clear: both;
+    overflow: hidden;
+    padding: 40px 0 0 0;
+}
+
+#content {
+    margin-bottom: 36px;
+}
+
+#content {
+    color: #333;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+#content p,
+#content ul,
+#content ol,
+#content dd,
+#content pre,
+#content hr {
+    margin-bottom: 24px;
+}
+
+#content ul ul,
+#content ol ol,
+#content ul ol,
+#content ol ul {
+    margin-bottom: 0;
+}
+
+#content pre,
+#content kbd,
+#content tt,
+#content var {
+    font-size: 15px;
+    line-height: 21px;
+}
+
+#content code {
+    font-size: 13px;
+}
+
+#content dt,
+#content th {
+    color: #000;
+}
+
+#content h1,
+#content h2,
+#content h3,
+#content h4,
+#content h5,
+#content h6 {
+    color: #000;
+    line-height: 1em;
+    margin: 10px 0px;
+}
+
+#content table {
+    border: 1px solid #e7e7e7;
+    margin: 0 -1px 24px 0;
+    text-align: left;
+}
+
+#content tr th,
+#content thead th {
+    color: #888;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 18px;
+    padding: 9px 24px;
+}
+
+#content tr td {
+    border-top: 1px solid #e7e7e7;
+    padding: 10px;
+}
+
+.hentry {
+    margin: 0 0 48px 0;
+}
+
+.single .hentry {
+    margin: 0 0 36px 0;
+}
+
+.definition {
+    margin: 5px 50px 20px 30px;
+    margin: 0;
+    padding: 20px 30px 1px 30px;
+    padding: 5px 20px;
+    background: #EFF;
+}
+
+.rule {
+    padding: 10px 20px;
+    background: #FFD;
+}
+
+tbody {
+    font-size: 90%;
+}
+
+thead {
+    font-size: 90%;
+}
+
+.link {
+    padding: 10px 20px;
+    background-color: #CEFDD0;
+}
+
+div .entry-content {
+    padding-right: 10px;
+}
+
+dfn {
+    font-weight: bold;
+}
+
+#back {
+    padding-left: 50%;
+    padding-right: 50%;
+}
+
+body {
+    margin: 50px auto;
+    width: 900px;
+    height: 300px;
+    box-shadow: 1px 1px 1px #333;
+    background-color: #3A78A1;
+    background-image: linear-gradient(#83ABC4 1px, transparent 1px),
+    linear-gradient(90deg, #83ABC4 1px, transparent 1px),
+    linear-gradient(#3A78A1 1px, transparent 1px),
+    linear-gradient(90deg, #3A78A1 1px, transparent 1px),
+    linear-gradient(#4E86AB 1px, transparent 1px),
+    linear-gradient(90deg, #4E86AB 1px, transparent 1px);
+    background-size: 100px 100px,
+    100px 100px,
+    5px 5px,
+    5px 5px,
+    20px 20px,
+    20px 20px;
+    background-position: -1px -1px,
+    -1px -1px,
+    0 0,
+    0 0,
+    -1px -1px,
+    -1px -1px;
+}
+
+img {
+    width: 80px;
+    height: 80px;
+    float: right;
+    float: top;
+}
+
+a {
+    color: #08c;
+}
+			
