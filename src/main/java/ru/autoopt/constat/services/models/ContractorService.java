@@ -95,7 +95,6 @@ public class ContractorService {
         result.getAdditionalInfo().add("Предыдущий балл скоринга: " + primaryRate);
         result.getAdditionalInfo().add("Текущий балл скоринга: " + secondaryRate);
 
-        int scoring = 0;
         int nMonth;
         int numberOfOverduePaymentsLimit = 3;
         int amountOfOverduePaymentsLimit;
@@ -122,39 +121,30 @@ public class ContractorService {
         }
 
         OverdueResult countResult = countOverdues(contractor, nMonth);
-        if (countResult.numberOfOverduePayments() < numberOfOverduePaymentsLimit) scoring += 2;
-        else {
+        if (countResult.numberOfOverduePayments() >= numberOfOverduePaymentsLimit) {
             result.getAdditionalWarnings().add("Отказано в увеличении суммы лимита по причине большого количества просрочек");
             return result;
         }
 
-        if (countResult.amountOfOverduePayments() <= amountOfOverduePaymentsLimit) scoring += 2;
-        else {
+        if (countResult.amountOfOverduePayments() >= amountOfOverduePaymentsLimit)  {
             result.getAdditionalWarnings().add("Отказано в увеличении суммы лимита по причине длительности просрочек");
             return result;
         }
 
-
-        if (secondaryRate <= 20 && primaryRate > 36) {
-            scoring -= 1;
-        } else if (secondaryRate >= 21 && secondaryRate <= 35 && primaryRate >= 10 && primaryRate <= 20) {
-            scoring += 1;
-        } else if (secondaryRate >= 35 && primaryRate > 10 && primaryRate <= 35) {
-            scoring += 2;
-        }
-
         double limitPeriodDenominator = 0;
 
-        result.getAdditionalInfo().add("Оценка пересмотра условий кредитования: " + scoring);
-
-        if (scoring == 3 || scoring == 4) {
+        if (primaryRate > 10 && primaryRate <= 20) {
             if (secondaryRate <= 20) limitPeriodDenominator = 3.8;
-            else if (secondaryRate <= 35) limitPeriodDenominator = 2.8;
-            else limitPeriodDenominator = 1.8;
-        } else if (scoring == 5) {
-            if (secondaryRate < 35) limitPeriodDenominator = 2.6;
-        } else {
-            if (secondaryRate <= 50) limitPeriodDenominator = 1.4;
+            else if (secondaryRate <= 35) limitPeriodDenominator = 3.6;
+            else if (secondaryRate <= 50) limitPeriodDenominator = 3.4;
+        } else if (primaryRate > 21 && primaryRate <= 35) {
+            if (secondaryRate <= 20) limitPeriodDenominator = 2.8;
+            else if (secondaryRate <= 35) limitPeriodDenominator = 2.6;
+            else if (secondaryRate <= 50) limitPeriodDenominator = 2.4;
+        } else if (primaryRate > 36 && primaryRate <= 50) {
+            if (secondaryRate <= 20) limitPeriodDenominator = 1.8;
+            else if (secondaryRate <= 35) limitPeriodDenominator = 1.6;
+            else if (secondaryRate <= 50) limitPeriodDenominator = 1.4;
         }
 
 
