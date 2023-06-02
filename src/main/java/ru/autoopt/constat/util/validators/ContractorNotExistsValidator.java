@@ -28,7 +28,7 @@ public class ContractorNotExistsValidator implements Validator {
     public void validate(Object target, Errors errors) {
         ContractorDTO contractor = (ContractorDTO) target;
 
-        if (contractorService.getContractorByINN(contractor.getINN()).isEmpty()) {
+        if (contractorService.getContractorByINN(contractor.getINN()).isEmpty() && contractor.getINN().length() == 10) {
             errors.rejectValue("INN", "", "Этого контрагента нет в системе");
         }
 
