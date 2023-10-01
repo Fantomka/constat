@@ -14,27 +14,27 @@
             <div class="entry-content">
                 <h1>КЛП</h1>
                 <hr/>
-                <form th:method="POST" th:action="@{/contractors/recalculate}" th:object="${contractor}">
-                    <label for="INN">Введите ИНН:</label>
-                    <input type="text" th:field="*{INN}" id="INN"/>
+                <form th:method="POST" th:action="@{/contractors/recalculate}">
+                    <label for="queryString">Введите ИНН или название компании:</label>
+                    <input type="text" th:name="queryString" id="queryString"/>
                     <input type="submit" value="Пересчитать!"/>
-                    <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
+<!--                    <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="${queryString}">INN error</div>-->
                 </form>
 
-                <div th:object="${contractor}">
-                    <div th:if="${contractor.getFocusHref() != null}">
+                <div th:if="${result}" th:object="${result.getContractorDTO()}">
+                    <div th:if="${result.getContractorDTO().getFocusHref() != null}">
                         <hr>
-                        <a th:href="${contractor.getFocusHref()}"
-                           th:text="${contractor.getFocusHref()}">VALUE</a>
+                        <a th:href="${result.getContractorDTO().getFocusHref()}"
+                           th:text="${result.getContractorDTO().getFocusHref()}">VALUE</a>
                     </div>
 
-                    <div th:if="${contractor.getSite() != null}">
-                        <a th:href="|https://${contractor.getSite()}|"
-                           th:text="${contractor.getOrgName()}">VALUE</a>
+                    <div th:if="${result.getContractorDTO().getSite() != null}">
+                        <a th:href="|https://${result.getContractorDTO().getSite()}|"
+                           th:text="${result.getContractorDTO().getOrgName()}">VALUE</a>
                     </div>
 
-                    <div th:if="${contractor.getSite() == null}">
-                        <span th:text="${contractor.getOrgName()}">VALUE</span>
+                    <div th:if="${result.getContractorDTO().getSite() == null}">
+                        <span th:text="${result.getContractorDTO().getOrgName()}">VALUE</span>
                     </div>
 
                 </div>

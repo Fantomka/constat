@@ -47,22 +47,19 @@ public class ContractorController {
     }
 
     @GetMapping("/recalculate")
-    public String recalculateContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
-        return "contractors_v1/recalculate";
-    }
+    public String recalculateContractor() { return "contractors_v1/recalculate"; }
 
     @PostMapping("/recalculate")
     public String recalculateContractor(
             Model model,
-            @ModelAttribute("contractor") @Valid ContractorDTO contractor,
-            BindingResult bindingResult
+            @RequestParam(value = "queryString") String queryString
+//            BindingResult bindingResult
     ) {
-        contractorNotExistsValidator.validate(contractor, bindingResult);
-        if (bindingResult.hasErrors())
-            return "contractors_v1/recalculate";
+//        contractorNotExistsValidator.validate(contractor, bindingResult);
+//        if (bindingResult.hasErrors())
+//            return "contractors_v1/recalculate";
 
-        contractor.setRate(0);
-        model.addAttribute("result", contractorService.recalculate(contractor));
+        model.addAttribute("result", contractorService.recalculate(queryString));
         return "contractors_v1/recalculate";
     }
 

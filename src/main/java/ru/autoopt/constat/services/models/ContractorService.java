@@ -81,12 +81,24 @@ public class ContractorService {
         return result;
     }
 
-    public StatementForm recalculate(ContractorDTO contractorDTO) {
+    public StatementForm recalculate(String queryString) {
 
         StatementForm result = new StatementForm();
 
-        Contractor contractor = contractorRepository.findByINN(contractorDTO.getINN()).get();
+        Contractor contractor;
+        if (queryString.matches("\\d+")) {
+            contractor = contractorRepository.findByINN(queryString).get();
+
+        } else {
+            List<Contractor> contractors = contractorRepository.findByNameContainingIgnoreCase(queryString);
+            contractor = contractors.stream().findFirst().get();
+        }
         Hibernate.initialize(contractor.getContracts());
+
+        ContractorDTO contractorDTO = new ContractorDTO();
+        contractorDTO.setINN(contractor.getINN());
+        contractorDTO.setRate(0);
+
         calculator.calculateRate(contractorDTO);
 
         int primaryRate = contractor.getRate();
@@ -150,6 +162,7 @@ public class ContractorService {
 
         double limitAmount = (double) contractorDTO.getRevenue() / 365 * creditPaymentTerm / limitPeriodDenominator;
         result.setResultString("Кредит разрешен на " + creditPaymentTerm + " дней, сумма - " + numberFormat.format(Math.ceil(limitAmount)) + "\n");
+        result.setContractorDTO(contractorDTO);
         return result;
     }
 

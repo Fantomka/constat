@@ -12,6 +12,8 @@ public interface ContractorRepository extends JpaRepository<Contractor, Long> {
 
     Optional<Contractor> findByINN(String INN);
 
+    List<Contractor> findByNameContainingIgnoreCase(String orgName);
+
     List<Contractor> findByRateLessThan(int threshold);
 
 }

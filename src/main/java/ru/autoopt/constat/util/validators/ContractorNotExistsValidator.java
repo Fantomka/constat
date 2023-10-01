@@ -26,11 +26,11 @@ public class ContractorNotExistsValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        ContractorDTO contractor = (ContractorDTO) target;
+        String queryString = (String) target;
 
-        if (contractorService.getContractorByINN(contractor.getINN()).isEmpty() && contractor.getINN().length() == 10) {
-            errors.rejectValue("INN", "", "Этого контрагента нет в системе");
-        }
+//        if (contractorService.getContractorByINN(contractor.getINN()).isEmpty() && contractor.getINN().length() == 10) {
+//            errors.rejectValue("INN", "", "Этого контрагента нет в системе");
+//        }
 
     }
 }
