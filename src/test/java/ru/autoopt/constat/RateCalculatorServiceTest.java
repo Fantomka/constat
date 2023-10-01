@@ -35,7 +35,7 @@ public class RateCalculatorServiceTest {
         ContractorDTO contractorDTO = new ContractorDTO();
         contractorDTO.setINN("1644015657");
         contractorDTO.setRate(0);
-        StatusCode statusCode = rateCalculatorService.calculate(contractorDTO);
+        StatusCode statusCode = rateCalculatorService.calculateRate(contractorDTO);
         System.out.println(contractorDTO.getRate() + " " + statusCode.toString());
     }
 }

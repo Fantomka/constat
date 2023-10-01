@@ -21,7 +21,7 @@ public class RateCalculatorService implements Calculator {
 
 
     @Override
-    public StatusCode calculate(ContractorDTO contractorDTO) {
+    public StatusCode calculateRate(ContractorDTO contractorDTO) {
 
         reqEnricher.enrich(contractorDTO);
 

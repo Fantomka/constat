@@ -46,7 +46,7 @@ public class ContractorService {
 
         StatementForm result = new StatementForm();
 
-        StatusCode statusCode = calculator.calculate(contractorDTO);
+        StatusCode statusCode = calculator.calculateRate(contractorDTO);
         int periodByAreaCode = staticInfoService.getValue(StatInfoType.REGION_RU, contractorDTO.getINN().substring(0, 2), Integer.class);
 
         int rate = contractorDTO.getRate();
@@ -87,7 +87,7 @@ public class ContractorService {
 
         Contractor contractor = contractorRepository.findByINN(contractorDTO.getINN()).get();
         Hibernate.initialize(contractor.getContracts());
-        calculator.calculate(contractorDTO);
+        calculator.calculateRate(contractorDTO);
 
         int primaryRate = contractor.getRate();
         int secondaryRate = contractorDTO.getRate();
