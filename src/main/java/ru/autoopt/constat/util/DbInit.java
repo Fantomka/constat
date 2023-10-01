@@ -8,6 +8,7 @@ import ru.autoopt.constat.models.ContractRecord;
 import ru.autoopt.constat.models.Contractor;
 import ru.autoopt.constat.repositories.ContractRecordRepository;
 import ru.autoopt.constat.repositories.ContractorRepository;
+import ru.autoopt.constat.util.kontur.enrichers.ReqEnricher;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class DbInit {
 
     private final ContractorRepository contractorRepository;
     private final ContractRecordRepository contractRecordRepository;
+    private final ReqEnricher reqEnricher;
 
     @PostConstruct
     public void postConstruct() {
@@ -31,16 +33,16 @@ public class DbInit {
             System.out.println("Absence of Contractors data is detected. Filling table with default values");
 
             List<Contractor> contractors = new ArrayList<>();
-            Contractor contractor1 = new Contractor("0262014762", 15);
-            Contractor contractor2 = new Contractor("1655325273", 11);
-            Contractor contractor3 = new Contractor("3849031759", 17);
-            Contractor contractor4 = new Contractor("5015012336", 24);
-            Contractor contractor5 = new Contractor("5017050954", 13);
-            Contractor contractor6 = new Contractor("2540186843", 16);
-            Contractor contractor7 = new Contractor("2465288642", 31);
-            Contractor contractor8 = new Contractor("2222044316", 15);
-            Contractor contractor9 = new Contractor("4205002373", 22);
-            Contractor contractor10 = new Contractor("5013019921", 19);
+            Contractor contractor1 = new Contractor("0262014762", reqEnricher.getOrgName("0262014762"), 15);
+            Contractor contractor2 = new Contractor("1655325273",  reqEnricher.getOrgName("1655325273"),11);
+            Contractor contractor3 = new Contractor("3849031759",  reqEnricher.getOrgName("3849031759"),17);
+            Contractor contractor4 = new Contractor("5015012336",  reqEnricher.getOrgName("5015012336"),24);
+            Contractor contractor5 = new Contractor("5017050954",  reqEnricher.getOrgName("5017050954"),13);
+            Contractor contractor6 = new Contractor("2540186843",  reqEnricher.getOrgName("2540186843"),16);
+            Contractor contractor7 = new Contractor("2465288642",  reqEnricher.getOrgName("2465288642"),31);
+            Contractor contractor8 = new Contractor("2222044316",  reqEnricher.getOrgName("2222044316"),15);
+            Contractor contractor9 = new Contractor("4205002373",  reqEnricher.getOrgName("4205002373"),22);
+            Contractor contractor10 = new Contractor("5013019921",  reqEnricher.getOrgName("5013019921"),19);
 
             contractors.add(contractor1);
             contractors.add(contractor2);

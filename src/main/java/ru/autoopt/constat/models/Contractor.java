@@ -25,6 +25,10 @@ public class Contractor {
     @Column(name = "INN")
     private String INN;
 
+    @NotEmpty(message = "Компания не может не иметь названия")
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "rate")
     private int rate;
 
@@ -55,6 +59,14 @@ public class Contractor {
         this.rate = rate;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public List<ContractRecord> getContracts() {
         return contracts;
     }
@@ -66,8 +78,9 @@ public class Contractor {
     public Contractor() {
     }
 
-    public Contractor(String INN, int rate) {
+    public Contractor(String INN, String name, int rate) {
         this.INN = INN;
+        this.name = name;
         this.rate = rate;
     }
 

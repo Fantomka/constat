@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
 import ru.autoopt.constat.config.KonturConfigProperties;
-import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.util.kontur.KonturConnector;
 
 
@@ -20,7 +19,7 @@ public class KonturConnectorTest {
                 new KonturConfigProperties("", "")
         );
 
-        JsonNode response = konturConnector.getApi("1644015657", "accountingReports");
+        JsonNode response = konturConnector.getByApi("1644015657", "accountingReports");
         System.out.println(response);
     }
 

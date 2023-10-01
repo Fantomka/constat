@@ -17,12 +17,11 @@ public class ReqEnricher implements Enricher {
 
     @Override
     public void enrich(ContractorDTO contractorDTO) {
-        JsonNode response = connector.getApi(contractorDTO.getINN(), "req");
+        JsonNode response = connector.getByApi(contractorDTO.getINN(), "req");
 
         String orgName = getString(response.get(0).get("UL").get("legalName").get("full"));
         Boolean foundingDate = dateIsBeforeYear(response.get(0).get("UL").get("registrationDate"));
         Boolean isStatusOk = getString(response.get(0).get("UL").get("status").get("statusString")).equals("Действующее");
-        // TODO Возможно будут доработки по этому полю
 
         JsonNode addresses = response.get(0).get("UL").get("history").get("legalAddresses");
 
@@ -38,5 +37,11 @@ public class ReqEnricher implements Enricher {
         contractorDTO.setIsStatusOk(isStatusOk);
         contractorDTO.setHasMassOrgAddress(hasMassOrgAddress);
         contractorDTO.setLastHeadChangeDateOk(lastHeadChangeDateOk);
+    }
+
+    public String getOrgName(String inn) {
+        JsonNode response = connector.getByApi(inn, "req");
+        return getString(response.get(0).get("UL").get("legalName").get("full"));
+
     }
 }
