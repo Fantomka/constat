@@ -8,7 +8,7 @@ import ru.autoopt.constat.util.kontur.KonturConnector;
 
 import java.util.Iterator;
 
-import static ru.autoopt.constat.util.common.CommonHelper.dateIsBefore2022_07_01;
+import static ru.autoopt.constat.util.common.CommonHelper.dateIsBeforeYear;
 
 @Component
 @AllArgsConstructor
@@ -32,7 +32,7 @@ public class PetitionersOfArbitrationEnricher implements Enricher {
         while (petitioners.hasNext()) {
             JsonNode petitioner = petitioners.next();
 
-            if (!Boolean.TRUE.equals(dateIsBefore2022_07_01(petitioner.get("lastCaseDate")))) {
+            if (!Boolean.TRUE.equals(dateIsBeforeYear(petitioner.get("lastCaseDate")))) {
                 sum += petitioner.get("y3Sum").asDouble();
             }
 
