@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.util.kontur.KonturConnector;
 
-import static ru.autoopt.constat.util.common.CommonHelper.dateIsBefore2022_07_01;
+import static ru.autoopt.constat.util.common.CommonHelper.dateIsBeforeYear;
 import static ru.autoopt.constat.util.common.CommonHelper.getString;
 
 @Component
@@ -20,7 +20,7 @@ public class ReqEnricher implements Enricher {
         JsonNode response = connector.getApi(contractorDTO.getINN(), "req");
 
         String orgName = getString(response.get(0).get("UL").get("legalName").get("full"));
-        Boolean foundingDate = dateIsBefore2022_07_01(response.get(0).get("UL").get("registrationDate"));
+        Boolean foundingDate = dateIsBeforeYear(response.get(0).get("UL").get("registrationDate"));
         Boolean isStatusOk = getString(response.get(0).get("UL").get("status").get("statusString")).equals("Действующее");
         // TODO Возможно будут доработки по этому полю
 
@@ -30,7 +30,7 @@ public class ReqEnricher implements Enricher {
         if (addresses != null) hasMassOrgAddress = addresses.size() > 1;
         else hasMassOrgAddress = false;
 
-        Boolean lastHeadChangeDateOk = dateIsBefore2022_07_01(response.get(0).get("UL").get("heads").get(0).get("firstDate"));
+        Boolean lastHeadChangeDateOk = dateIsBeforeYear(response.get(0).get("UL").get("heads").get(0).get("firstDate"));
 
         contractorDTO.setFocusHref(getString(response.get(0).get("focusHref")));
         contractorDTO.setOrgName(orgName);

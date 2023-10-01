@@ -13,10 +13,13 @@ public class CommonHelper {
         return String.valueOf(node).replaceAll("^\"|\"$", "").replaceAll("\\\\", "");
     }
 
-    public static Boolean dateIsBefore2022_07_01(JsonNode date) {
+    public static Boolean dateIsBeforeYear(JsonNode date) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
         try {
-            return formatter.parse(getString(date)).before(formatter.parse("2022-07-01"));
+            calendar.setTime(formatter.parse(getString(date)));
+            calendar.add(Calendar.YEAR, 1);
+            return calendar.getTime().before(new Date());
         } catch (ParseException e) {
             return null;
         }
