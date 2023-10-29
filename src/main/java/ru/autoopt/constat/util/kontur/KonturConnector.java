@@ -11,7 +11,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.autoopt.constat.config.KonturConfigProperties;
-import ru.autoopt.constat.dto.ContractorDTO;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -26,7 +25,7 @@ public class KonturConnector {
     private final ObjectMapper mapper;
     private final KonturConfigProperties konturConfigProperties;
 
-    public JsonNode getApi(String inn, String apiMethod) {
+    public JsonNode getByApi(String inn, String apiMethod) {
         Map<String, String> params = new HashMap<>();
         params.put("inn", inn);
         return getRequest(apiMethod, params);

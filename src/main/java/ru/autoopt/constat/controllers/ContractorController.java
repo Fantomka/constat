@@ -47,12 +47,12 @@ public class ContractorController {
     }
 
     @GetMapping("/recalculate")
-    public String updateContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
+    public String recalculateContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
         return "contractors_v1/recalculate";
     }
 
     @PostMapping("/recalculate")
-    public String updateContractor(
+    public String recalculateContractor(
             Model model,
             @ModelAttribute("contractor") @Valid ContractorDTO contractor,
             BindingResult bindingResult

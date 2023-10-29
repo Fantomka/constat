@@ -14,7 +14,7 @@ public class TrademarkEnricher implements Enricher {
 
     @Override
     public void enrich(ContractorDTO contractorDTO) {
-        JsonNode response = connector.getApi(contractorDTO.getINN(), "trademarks");
+        JsonNode response = connector.getByApi(contractorDTO.getINN(), "trademarks");
 
         Boolean hasTradeMarks = !response.get(0).get("trademarks").isEmpty();
 
