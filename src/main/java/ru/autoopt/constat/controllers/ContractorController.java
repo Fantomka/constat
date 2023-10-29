@@ -1,15 +1,20 @@
 package ru.autoopt.constat.controllers;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.autoopt.constat.dto.ContractorDTO;
+import ru.autoopt.constat.models.Contractor;
 import ru.autoopt.constat.services.models.ContractorService;
 import ru.autoopt.constat.util.validators.ContractorAlreadyExistsValidator;
 import ru.autoopt.constat.util.validators.ContractorNotExistsValidator;
+
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/contractors")
@@ -21,8 +26,24 @@ public class ContractorController {
     private final ContractorNotExistsValidator contractorNotExistsValidator;
 
     @GetMapping()
-    public String index(@ModelAttribute("contractor") ContractorDTO contractor) {
+    public String index() {
         return "contractors_v1/menu";
+    }
+
+    @GetMapping("/list")
+    public String contractorsIndex(
+            Model model,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "contractors_per_page", required = false)
+            @Max(value = 20, message = "Количество контрагентов не должно превышать 20")
+            Integer contractorsPerPage
+    ) {
+        List<Contractor> contractors = contractorService.index(page, contractorsPerPage);
+        model.addAttribute("contractors", contractors);
+        model.addAttribute("savedPage", Objects.requireNonNullElse(page, 1));
+        model.addAttribute("savedContractorsPerPage", Objects.requireNonNullElse(contractorsPerPage, contractors.size()));
+
+        return "contractors_v1/index";
     }
 
     @GetMapping("/new")

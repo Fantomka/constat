@@ -3,6 +3,8 @@ package ru.autoopt.constat.services.models;
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.autoopt.constat.dto.ContractorDTO;
@@ -28,7 +30,6 @@ import static ru.autoopt.constat.util.common.CommonHelper.getDatePlusNMonth;
 public class ContractorService {
 
     private final ContractorRepository contractorRepository;
-    private final ModelMapper modelMapper;
     private final Calculator calculator;
     private final ReqEnricher reqEnricher;
     private final PetitionersOfArbitrationEnricher petitionersOfArbitrationEnricher;
@@ -41,6 +42,12 @@ public class ContractorService {
     }
 
     public record OverdueResult(int numberOfOverduePayments, int amountOfOverduePayments) {}
+
+    public List<Contractor> index(Integer page, Integer contractorPerPage) {
+        if (page != null && contractorPerPage != null){
+            return contractorRepository.findAll(PageRequest.of(page, contractorPerPage)).getContent();
+        } else return contractorRepository.findAll();
+    }
 
     public StatementForm counterpartyVerification(ContractorDTO contractorDTO) {
 

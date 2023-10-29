@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список всех контрагентов</title>
+    <meta name="description" content="Список контрагентов">
+    <link rel="stylesheet" th:href="@{../styles/css/style.css}">
+</head>
+<body>
+
+<div id="wrapper">
+    <div id="main">
+        <div id="content" role="main">
+            <div class="entry-content">
+                <h1>КЛП</h1>
+                <hr/>
+
+                <div th:if="${contractors.isEmpty()}">
+                    <p>В базе данных не имеется данных по контрагентам</p>
+                </div>
+
+                <div th:if="${!contractors.isEmpty()}">
+                    <h2>
+                        <b>Контрагенты:</b>
+                    </h2>
+                    <br/>
+
+                    <table border="1">
+                        <thead>
+                        <tr>
+                            <td>ИНН</td>
+                            <td>Название компании</td>
+                            <td>количество контрактов</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:each="contractor : ${contractors}">
+                            <tr>
+                                <td>
+                                    <a th:href="@{/contractors/{inn}(inn=${contractor.getINN()})}"
+                                       th:text="${contractor.getINN()}">VALUE</a>
+                                </td>
+                                <td>
+                                    <a th:href="@{/contractors/{inn}(inn=${contractor.getINN()})}"
+                                       th:text="${contractor.getName()}">VALUE</a>
+                                </td>
+                                <td>
+                                    <a th:href="@{/contractors/{inn}(inn=${contractor.getINN()})}"
+                                       th:text="${contractor.getContracts().size()}">VALUE</a>
+                                </td>
+                            </tr>
+                        </div>
+                        </tbody>
+                    </table>
+                </div>
+                <hr/>
+                <form method="GET" action="/contractors">
+                    <input class="pressed-button" type="submit" value="На главное меню"/>
+                </form>
+                <form th:align="right" th:method="GET" th:action="@{/contractors/list}">
+                    <label for="page">страница:</label>
+                    <input th:size="1px" type="text" th:name="page" th:value="${savedPage}" id="page"/>
+                    <label for="contractors_per_page">количество:</label>
+                    <input th:size="1px" type="text" th:name="contractors_per_page" th:value="${savedContractorsPerPage}" id="contractors_per_page"/>
+                    <input class="pressed-button" type="submit" value="Обновить"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
