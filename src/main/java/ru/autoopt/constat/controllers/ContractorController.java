@@ -46,12 +46,12 @@ public class ContractorController {
         return "contractors_v1/index";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/check/new")
     public String newContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
-        return "contractors_v1/new";
+        return "contractors_v1/check/new";
     }
 
-    @PostMapping("/new")
+    @PostMapping("/check/new")
     public String newContractor(
             Model model,
             @ModelAttribute("contractor") @Valid ContractorDTO contractor,
@@ -59,20 +59,20 @@ public class ContractorController {
     ) {
         contractorAlreadyExistsValidator.validate(contractor, bindingResult);
         if (bindingResult.hasErrors())
-            return "contractors_v1/new";
+            return "contractors_v1/check/new";
 
         contractor.setRate(0);
         model.addAttribute("result", contractorService.counterpartyVerification(contractor));
 
-        return "contractors_v1/new";
+        return "contractors_v1/check/new";
     }
 
-    @GetMapping("/recalculate")
+    @GetMapping("/check/existing")
     public String recalculateContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
-        return "contractors_v1/recalculate";
+        return "contractors_v1/check/existing";
     }
 
-    @PostMapping("/recalculate")
+    @PostMapping("/check/existing")
     public String recalculateContractor(
             Model model,
             @ModelAttribute("contractor") @Valid ContractorDTO contractor,
@@ -80,19 +80,19 @@ public class ContractorController {
     ) {
         contractorNotExistsValidator.validate(contractor, bindingResult);
         if (bindingResult.hasErrors())
-            return "contractors_v1/recalculate";
+            return "contractors_v1/check/existing";
 
         contractor.setRate(0);
         model.addAttribute("result", contractorService.recalculate(contractor));
-        return "contractors_v1/recalculate";
+        return "contractors_v1/check/existing";
     }
 
-    @GetMapping("/check")
+    @GetMapping("/check/danger-zone")
     public String checkContractors(Model model) {
 
         model.addAttribute("contractors", contractorService.indexContractorsInDangerZone());
 
-        return "contractors_v1/check";
+        return "contractors_v1/check/danger_zone";
     }
 
 }

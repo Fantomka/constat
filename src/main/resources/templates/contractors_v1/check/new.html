@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Новый контрагент</title>
     <meta name="description" content="Проверка нового контрагента. Составление скоринга и расчёт кредитных условий">
-    <link rel="stylesheet" th:href="@{../styles/css/style.css}">
+    <link rel="stylesheet" th:href="@{../../styles/css/style.css}">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
             <div class="entry-content">
                 <h1>КЛП</h1>
                 <hr/>
-                <form th:method="POST" th:action="@{/contractors/new}" th:object="${contractor}">
+                <form th:method="POST" th:action="@{/contractors/check/new}" th:object="${contractor}">
                     <label for="INN">Введите ИНН:</label>
                     <input type="text" th:field="*{INN}" id="INN"/>
                     <input type="submit" value="Проверить!"/>

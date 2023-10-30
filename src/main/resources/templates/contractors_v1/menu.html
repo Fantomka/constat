@@ -14,11 +14,11 @@
             <div class="entry-content">
                 <h1>КЛП</h1>
                 <h2 th:align="center">Главное меню</h2>
-                <form th:align="center" method="GET" action="/contractors/new">
+                <form th:align="center" method="GET" action="/contractors/check/new">
                     <input class="pressed-button-menu" type="submit" value="Проверить нового контрагента"/>
                 </form>
 
-                <form th:align="center" method="GET" action="/contractors/recalculate">
+                <form th:align="center" method="GET" action="/contractors/check/existing">
                     <input class="pressed-button-menu" type="submit" value="Пересчитать старого контрагента"/>
                 </form>
 
@@ -26,7 +26,7 @@
                     <input class="pressed-button-menu" type="submit" value="Список всех контрагентов"/>
                 </form>
 
-                <form th:align="center" method="GET" action="/contractors/check">
+                <form th:align="center" method="GET" action="/contractors/check/danger-zone">
                     <input class="pressed-button-menu" type="submit" value="Список опасных контрагентов"/>
                 </form>
             </div>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Пересчёт условий по кредиту</title>
     <meta name="description" content="Перерасчёт условий контрагента.">
-    <link rel="stylesheet" th:href="@{../styles/css/style.css}">
+    <link rel="stylesheet" th:href="@{../../styles/css/style.css}">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
             <div class="entry-content">
                 <h1>КЛП</h1>
                 <hr/>
-                <form th:method="POST" th:action="@{/contractors/recalculate}" th:object="${contractor}">
+                <form th:method="POST" th:action="@{/contractors/check/existing}" th:object="${contractor}">
                     <label for="INN">Введите ИНН:</label>
                     <input type="text" th:field="*{INN}" id="INN"/>
                     <input type="submit" value="Пересчитать!"/>
