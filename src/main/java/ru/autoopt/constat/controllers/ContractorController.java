@@ -73,12 +73,7 @@ public class ContractorController {
         @RequestParam(value = "rate") int rate,
         @RequestParam(value = "orgName") String orgName
     ) {
-        ContractorDTO contractorDTO = new ContractorDTO();
-        contractorDTO.setINN(inn);
-        contractorDTO.setOrgName(orgName);
-        contractorDTO.setRate(rate);
-        System.out.println(contractorDTO);
-        contractorService.save(contractorDTO);
+        contractorService.save(createContractorDTO(inn, orgName, rate));
         return "redirect:/contractors/list";
     }
 
@@ -87,12 +82,28 @@ public class ContractorController {
         return "contractors_v1/check/existing";
     }
 
+    @GetMapping("/check/existing/{inn}")
+    public String existingContractorFromExternal(
+        Model model,
+        @PathVariable("inn") String inn,
+        @RequestParam(value = "orgName") String orgName
+    ) {
+        ContractorDTO contractorDTO = createContractorDTO(inn, orgName, 0);
+        model.addAttribute("result", contractorService.recalculate(contractorDTO));
+        model.addAttribute("contractor", contractorDTO);
+
+        return "contractors_v1/check/existing";
+    }
+
+
     @PostMapping("/check/existing")
     public String recalculateContractor(
             Model model,
+            @RequestParam(value = "inn", required = false) String inn,
             @ModelAttribute("contractor") @Valid ContractorDTO contractor,
             BindingResult bindingResult
     ) {
+        if (inn != null) contractor.setINN(inn);
         contractorNotExistsValidator.validate(contractor, bindingResult);
         if (bindingResult.hasErrors())
             return "contractors_v1/check/existing";
@@ -108,6 +119,14 @@ public class ContractorController {
         model.addAttribute("contractors", contractorService.indexContractorsInDangerZone());
 
         return "contractors_v1/check/danger_zone";
+    }
+
+    private ContractorDTO createContractorDTO(String inn, String orgName, int rate) {
+        ContractorDTO contractorDTO = new ContractorDTO();
+        contractorDTO.setINN(inn);
+        contractorDTO.setOrgName(orgName);
+        contractorDTO.setRate(rate);
+        return contractorDTO;
     }
 
 }
