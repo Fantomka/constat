@@ -113,6 +113,11 @@ public class ContractorController {
         return "contractors_v1/check/existing";
     }
 
+    @DeleteMapping("/delete/existing/{inn}")
+    public String deleteExistingContractor(@PathVariable("inn") String inn) {
+        contractorService.delete(inn);
+        return "redirect:/contractors/list";
+    }
     @GetMapping("/check/danger-zone")
     public String checkContractors(Model model) {
 
