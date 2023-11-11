@@ -3,6 +3,7 @@ package ru.autoopt.constat.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import ru.autoopt.constat.models.Contractor;
 
 @Data
 @ToString(onlyExplicitlyIncluded = true)
@@ -91,6 +92,10 @@ public class ContractorDTO {
 
     // Чистая прибыль
     private Boolean isNetIncomeOk;
+
+    public Contractor toEntity() {
+        return new Contractor(this.INN, this.orgName, this.rate);
+    }
 
     public void setINN(String INN) {
         if(this.INN == null) {

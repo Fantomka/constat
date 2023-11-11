@@ -47,12 +47,12 @@ public class ContractorController {
     }
 
     @GetMapping("/check/new")
-    public String newContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
+    public String checkNewContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
         return "contractors_v1/check/new";
     }
 
     @PostMapping("/check/new")
-    public String newContractor(
+    public String checkNewContractor(
             Model model,
             @ModelAttribute("contractor") @Valid ContractorDTO contractor,
             BindingResult bindingResult
@@ -65,6 +65,21 @@ public class ContractorController {
         model.addAttribute("result", contractorService.counterpartyVerification(contractor));
 
         return "contractors_v1/check/new";
+    }
+
+    @PostMapping("/add/new/{inn}")
+    public String create(
+        @PathVariable("inn") String inn,
+        @RequestParam(value = "rate") int rate,
+        @RequestParam(value = "orgName") String orgName
+    ) {
+        ContractorDTO contractorDTO = new ContractorDTO();
+        contractorDTO.setINN(inn);
+        contractorDTO.setOrgName(orgName);
+        contractorDTO.setRate(rate);
+        System.out.println(contractorDTO);
+        contractorService.save(contractorDTO);
+        return "redirect:/contractors/list";
     }
 
     @GetMapping("/check/existing")

@@ -41,6 +41,11 @@ public class ContractorService {
         return contractorRepository.findByINN(INN);
     }
 
+    @Transactional
+    public void save(ContractorDTO contractorDTO) {
+        contractorRepository.save(contractorDTO.toEntity());
+    }
+
     public record OverdueResult(int numberOfOverduePayments, int amountOfOverduePayments) {}
 
     public List<Contractor> index(Integer page, Integer contractorPerPage) {

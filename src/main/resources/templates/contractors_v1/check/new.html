@@ -19,7 +19,6 @@
                     <input type="text" th:field="*{INN}" id="INN"/>
                     <input type="submit" value="Проверить!"/>
                     <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
-
                 </form>
 
                 <div th:object="${contractor}">
@@ -53,6 +52,14 @@
 
                     <div th:if="${result.resultString != null}">
                         <p class="link" th:text="${result.getResultString()}">Балл скоринга</p>
+                    </div>
+
+                    <div th:object="${contractor}">
+                        <form method="POST" th:action="@{/contractors/add/new/{inn}(inn=${contractor.getINN()})}" >
+                            <input type="hidden" id="rate" name="rate" th:value="${contractor.getRate()}">
+                            <input type="hidden" id="orgName" name="orgName" th:value="${contractor.getOrgName()}">
+                            <input class="pressed-button" type="submit" value="Добавить контрагента"/>
+                        </form>
                     </div>
                 </div>
 
