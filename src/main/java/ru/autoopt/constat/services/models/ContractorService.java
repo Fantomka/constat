@@ -60,6 +60,12 @@ public class ContractorService {
         contractorRepository.deleteByINN(inn);
     }
 
+    public List<ContractRecord> getContractsByINN(String inn) {
+        Contractor contractor = contractorRepository.findByINN(inn).get();
+        Hibernate.initialize(contractor.getContracts());
+        return contractor.getContracts();
+    }
+
     public record OverdueResult(int numberOfOverduePayments, int amountOfOverduePayments) {}
 
     public List<Contractor> index(Integer page, Integer contractorPerPage) {

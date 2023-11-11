@@ -36,7 +36,39 @@
                     <div th:if="${contractor.getSite() == null}">
                         <span th:text="${contractor.getOrgName()}">VALUE</span>
                     </div>
+                </div>
 
+                <div th:if="${contracts != null && !contracts.isEmpty()}">
+                    <hr>
+                    <h3>
+                        <b>История сделок:</b>
+                    </h3>
+                    <br/>
+                    <table border="1">
+                        <thead>
+                        <tr>
+                            <td>Дата выдачи лимита</td>
+                            <td>Срок выдачи [дн]</td>
+                            <td>Срок просрочки выплаты [дн]</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:each="contract : ${contracts}">
+                            <tr>
+                                <td>
+                                    <span th:text="${contract.getGivenAt()}">VALUE</span>
+                                </td>
+                                <td>
+                                    <span th:text="${contract.getExpiresAfter()}">VALUE</span>
+
+                                </td>
+                                <td>
+                                    <span th:text="${contract.getDaysOverdue()}">VALUE</span>
+                                </td>
+                            </tr>
+                        </div>
+                        </tbody>
+                    </table>
                 </div>
 
                 <div th:if="${result}" th:object="${result}">
@@ -54,7 +86,7 @@
                     </div>
 
                     <div th:if="${result.resultString != null}">
-                        <p class="link" th:text="${result.getResultString()}">Балл скоринга</p>
+                        <p class="link" th:text="${result.getResultString()}">результат пересчёта</p>
                     </div>
 
                     <div th:object="${contractor}">

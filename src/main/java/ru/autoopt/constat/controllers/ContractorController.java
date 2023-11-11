@@ -3,6 +3,7 @@ package ru.autoopt.constat.controllers;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -91,7 +92,7 @@ public class ContractorController {
         ContractorDTO contractorDTO = createContractorDTO(inn, orgName, 0);
         model.addAttribute("result", contractorService.recalculate(contractorDTO));
         model.addAttribute("contractor", contractorDTO);
-
+        model.addAttribute("contracts", contractorService.getContractsByINN(contractorDTO.getINN()));
         return "contractors_v1/check/existing";
     }
 
@@ -99,17 +100,16 @@ public class ContractorController {
     @PostMapping("/check/existing")
     public String recalculateContractor(
             Model model,
-            @RequestParam(value = "inn", required = false) String inn,
-            @ModelAttribute("contractor") @Valid ContractorDTO contractor,
+            @ModelAttribute("contractor") @Valid ContractorDTO contractorDTO,
             BindingResult bindingResult
     ) {
-        if (inn != null) contractor.setINN(inn);
-        contractorNotExistsValidator.validate(contractor, bindingResult);
+        contractorNotExistsValidator.validate(contractorDTO, bindingResult);
         if (bindingResult.hasErrors())
             return "contractors_v1/check/existing";
 
-        contractor.setRate(0);
-        model.addAttribute("result", contractorService.recalculate(contractor));
+        contractorDTO.setRate(0);
+        model.addAttribute("result", contractorService.recalculate(contractorDTO));
+        model.addAttribute("contracts", contractorService.getContractsByINN(contractorDTO.getINN()));
         return "contractors_v1/check/existing";
     }
 
@@ -120,9 +120,7 @@ public class ContractorController {
     }
     @GetMapping("/check/danger-zone")
     public String checkContractors(Model model) {
-
         model.addAttribute("contractors", contractorService.indexContractorsInDangerZone());
-
         return "contractors_v1/check/danger_zone";
     }
 
