@@ -14,4 +14,6 @@ public interface ContractorRepository extends JpaRepository<Contractor, Long> {
 
     List<Contractor> findByRateLessThan(int threshold);
 
+    void deleteByINN(String INN);
+
 }

@@ -3,6 +3,7 @@ package ru.autoopt.constat.controllers;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,53 +47,89 @@ public class ContractorController {
         return "contractors_v1/index";
     }
 
-    @GetMapping("/new")
-    public String newContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
-        return "contractors_v1/new";
+    @GetMapping("/check/new")
+    public String checkNewContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
+        return "contractors_v1/check/new";
     }
 
-    @PostMapping("/new")
-    public String newContractor(
+    @PostMapping("/check/new")
+    public String checkNewContractor(
             Model model,
             @ModelAttribute("contractor") @Valid ContractorDTO contractor,
             BindingResult bindingResult
     ) {
         contractorAlreadyExistsValidator.validate(contractor, bindingResult);
         if (bindingResult.hasErrors())
-            return "contractors_v1/new";
+            return "contractors_v1/check/new";
 
         contractor.setRate(0);
         model.addAttribute("result", contractorService.counterpartyVerification(contractor));
 
-        return "contractors_v1/new";
+        return "contractors_v1/check/new";
     }
 
-    @GetMapping("/recalculate")
+    @PostMapping("/add/new/{inn}")
+    public String create(
+        @PathVariable("inn") String inn,
+        @RequestParam(value = "rate") int rate,
+        @RequestParam(value = "orgName") String orgName
+    ) {
+        contractorService.save(createContractorDTO(inn, orgName, rate));
+        return "redirect:/contractors/list";
+    }
+
+    @GetMapping("/check/existing")
     public String recalculateContractor(@ModelAttribute("contractor") ContractorDTO contractorDTO) {
-        return "contractors_v1/recalculate";
+        return "contractors_v1/check/existing";
     }
 
-    @PostMapping("/recalculate")
+    @GetMapping("/check/existing/{inn}")
+    public String existingContractorFromExternal(
+        Model model,
+        @PathVariable("inn") String inn,
+        @RequestParam(value = "orgName") String orgName
+    ) {
+        ContractorDTO contractorDTO = createContractorDTO(inn, orgName, 0);
+        model.addAttribute("result", contractorService.recalculate(contractorDTO));
+        model.addAttribute("contractor", contractorDTO);
+        model.addAttribute("contracts", contractorService.getContractsByINN(contractorDTO.getINN()));
+        return "contractors_v1/check/existing";
+    }
+
+
+    @PostMapping("/check/existing")
     public String recalculateContractor(
             Model model,
-            @ModelAttribute("contractor") @Valid ContractorDTO contractor,
+            @ModelAttribute("contractor") @Valid ContractorDTO contractorDTO,
             BindingResult bindingResult
     ) {
-        contractorNotExistsValidator.validate(contractor, bindingResult);
+        contractorNotExistsValidator.validate(contractorDTO, bindingResult);
         if (bindingResult.hasErrors())
-            return "contractors_v1/recalculate";
+            return "contractors_v1/check/existing";
 
-        contractor.setRate(0);
-        model.addAttribute("result", contractorService.recalculate(contractor));
-        return "contractors_v1/recalculate";
+        contractorDTO.setRate(0);
+        model.addAttribute("result", contractorService.recalculate(contractorDTO));
+        model.addAttribute("contracts", contractorService.getContractsByINN(contractorDTO.getINN()));
+        return "contractors_v1/check/existing";
     }
 
-    @GetMapping("/check")
+    @DeleteMapping("/delete/existing/{inn}")
+    public String deleteExistingContractor(@PathVariable("inn") String inn) {
+        contractorService.delete(inn);
+        return "redirect:/contractors/list";
+    }
+    @GetMapping("/check/danger-zone")
     public String checkContractors(Model model) {
-
         model.addAttribute("contractors", contractorService.indexContractorsInDangerZone());
+        return "contractors_v1/check/danger_zone";
+    }
 
-        return "contractors_v1/check";
+    private ContractorDTO createContractorDTO(String inn, String orgName, int rate) {
+        ContractorDTO contractorDTO = new ContractorDTO();
+        contractorDTO.setINN(inn);
+        contractorDTO.setOrgName(orgName);
+        contractorDTO.setRate(rate);
+        return contractorDTO;
     }
 
 }

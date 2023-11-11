@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Пересчёт условий по кредиту</title>
-    <meta name="description" content="Перерасчёт условий контрагента.">
-    <link rel="stylesheet" th:href="@{../styles/css/style.css}">
+    <title>Новый контрагент</title>
+    <meta name="description" content="Проверка нового контрагента. Составление скоринга и расчёт кредитных условий">
+    <link rel="stylesheet" th:href="@{~/styles/css/style.css}">
 </head>
 <body>
 
@@ -14,10 +14,10 @@
             <div class="entry-content">
                 <h1>КЛП</h1>
                 <hr/>
-                <form th:method="POST" th:action="@{/contractors/recalculate}" th:object="${contractor}">
+                <form th:method="POST" th:action="@{/contractors/check/new}" th:object="${contractor}">
                     <label for="INN">Введите ИНН:</label>
                     <input type="text" th:field="*{INN}" id="INN"/>
-                    <input type="submit" value="Пересчитать!"/>
+                    <input type="submit" value="Проверить!"/>
                     <div style="color:red" th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}">INN error</div>
                 </form>
 
@@ -36,15 +36,12 @@
                     <div th:if="${contractor.getSite() == null}">
                         <span th:text="${contractor.getOrgName()}">VALUE</span>
                     </div>
-
                 </div>
 
                 <div th:if="${result}" th:object="${result}">
                     <hr>
-                    <div th:if="${!result.getAdditionalInfo().isEmpty()}">
-                        <div th:each="msg: ${result.getAdditionalInfo()}">
-                            <strong th:text="${msg}">текст с результатом</strong>
-                        </div>
+                    <div th:if="${contractor.getRate() != null}">
+                        <strong th:text="|Балл скоринга:${contractor.getRate()}|">Балл скоринга</strong>
                     </div>
 
                     <div th:if="${!result.getAdditionalWarnings().isEmpty()}">
@@ -56,6 +53,14 @@
                     <div th:if="${result.resultString != null}">
                         <p class="link" th:text="${result.getResultString()}">Балл скоринга</p>
                     </div>
+
+                    <div th:object="${contractor}">
+                        <form method="POST" th:action="@{/contractors/add/new/{inn}(inn=${contractor.getINN()})}" >
+                            <input type="hidden" id="rate" name="rate" th:value="${contractor.getRate()}">
+                            <input type="hidden" id="orgName" name="orgName" th:value="${contractor.getOrgName()}">
+                            <input class="pressed-button" type="submit" value="Добавить контрагента"/>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="definition">
@@ -63,6 +68,7 @@
                         <dfn>Балл скоринга</dfn> - основа оценки кредитоспособности контрагента, рассчитывается, чтобы
                         показать уровень благонадежности нового заемщика компании<br>
                         <dfn>Категории контрагентов по баллам:</dfn>
+
                     <ul>
                         <li>— 0-10 – полная предоплата, ненадежный контрагент;</li>
                         <li>— 11-20 – контрагент умеренной надежности;</li>
@@ -80,5 +86,7 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>
+

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Список всех контрагентов</title>
     <meta name="description" content="Список контрагентов">
-    <link rel="stylesheet" th:href="@{../styles/css/style.css}">
+    <link rel="stylesheet" th:href="@{~/styles/css/style.css}">
 </head>
 <body>
 
@@ -19,10 +19,14 @@
                     <p>В базе данных не имеется данных по контрагентам</p>
                 </div>
 
+                <form method="GET" action="/contractors/check/new">
+                    <input class="pressed-button" type="submit" value="Добавить контрагента"/>
+                </form>
+
                 <div th:if="${!contractors.isEmpty()}">
-                    <h2>
+                    <h3>
                         <b>Контрагенты:</b>
-                    </h2>
+                    </h3>
                     <br/>
 
                     <table border="1">
@@ -31,22 +35,27 @@
                             <td>ИНН</td>
                             <td>Название компании</td>
                             <td>количество контрактов</td>
+                            <td>Текущий балл</td>
                         </tr>
                         </thead>
                         <tbody>
                         <div th:each="contractor : ${contractors}">
                             <tr>
                                 <td>
-                                    <a th:href="@{/contractors/{inn}(inn=${contractor.getINN()})}"
+                                    <a th:href="@{/contractors/check/existing/{inn}(inn=${contractor.getINN()}, orgName=${contractor.getName()})}"
                                        th:text="${contractor.getINN()}">VALUE</a>
                                 </td>
                                 <td>
-                                    <a th:href="@{/contractors/{inn}(inn=${contractor.getINN()})}"
+                                    <a th:href="@{/contractors/check/existing/{inn}(inn=${contractor.getINN()}, orgName=${contractor.getName()})}"
                                        th:text="${contractor.getName()}">VALUE</a>
                                 </td>
                                 <td>
-                                    <a th:href="@{/contractors/{inn}(inn=${contractor.getINN()})}"
+                                    <a th:href="@{/contractors/check/existing/{inn}(inn=${contractor.getINN()}, orgName=${contractor.getName()})}"
                                        th:text="${contractor.getContracts().size()}">VALUE</a>
+                                </td>
+                                <td>
+                                    <a th:href="@{/contractors/check/existing/{inn}(inn=${contractor.getINN()}, orgName=${contractor.getName()})}"
+                                       th:text="${contractor.getRate()}">VALUE</a>
                                 </td>
                             </tr>
                         </div>

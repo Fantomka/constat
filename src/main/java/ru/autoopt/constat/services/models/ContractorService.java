@@ -41,6 +41,31 @@ public class ContractorService {
         return contractorRepository.findByINN(INN);
     }
 
+    @Transactional
+    public void save(ContractorDTO contractorDTO) {
+        contractorRepository.save(contractorDTO.toEntity());
+    }
+
+    @Transactional
+    public void save(Contractor contractor) {
+        contractorRepository.save(contractor);
+    }
+    @Transactional
+    public void delete(ContractorDTO contractorDTO) {
+        contractorRepository.delete(contractorDTO.toEntity());
+    }
+
+    @Transactional
+    public void delete(String inn) {
+        contractorRepository.deleteByINN(inn);
+    }
+
+    public List<ContractRecord> getContractsByINN(String inn) {
+        Contractor contractor = contractorRepository.findByINN(inn).get();
+        Hibernate.initialize(contractor.getContracts());
+        return contractor.getContracts();
+    }
+
     public record OverdueResult(int numberOfOverduePayments, int amountOfOverduePayments) {}
 
     public List<Contractor> index(Integer page, Integer contractorPerPage) {
@@ -106,57 +131,62 @@ public class ContractorService {
         int numberOfOverduePaymentsLimit = 3;
         int amountOfOverduePaymentsLimit;
 
-        int creditPaymentTerm = contractor.getContracts().get(0).getExpiresAfter();
-
-        if (secondaryRate <= 10) {
-            result.getAdditionalWarnings().add("Требуется полная предоплата по текущему скорингу.");
-            return result;
-        }
-
-        if (contractor.getContracts().get(contractor.getContracts().size()-1).getDaysOverdue() >= 30) {
-            result.getAdditionalWarnings().add("Требуется полная предоплата по причине просрочки более 30 дней при последнем выдаче кредита");
-            return result;
-        }
-
-
-        if (creditPaymentTerm <= 14) {
-            nMonth = 3;
-            amountOfOverduePaymentsLimit = 20;
+        if (contractor.getContracts().size() == 0) {
+            result.getAdditionalWarnings().add("Для просмотра переоценки, необходимо добавить в историю хотя бы один контракт.");
         } else {
-            nMonth = 6;
-            amountOfOverduePaymentsLimit = 30;
+
+            int creditPaymentTerm = contractor.getContracts().get(0).getExpiresAfter();
+
+            if (secondaryRate <= 10) {
+                result.getAdditionalWarnings().add("Требуется полная предоплата по текущему скорингу.");
+                return result;
+            }
+
+            if (contractor.getContracts().get(contractor.getContracts().size()-1).getDaysOverdue() >= 30) {
+                result.getAdditionalWarnings().add("Требуется полная предоплата по причине просрочки более 30 дней при последнем выдаче кредита");
+                return result;
+            }
+
+
+            if (creditPaymentTerm <= 14) {
+                nMonth = 3;
+                amountOfOverduePaymentsLimit = 20;
+            } else {
+                nMonth = 6;
+                amountOfOverduePaymentsLimit = 30;
+            }
+
+            OverdueResult countResult = countOverdues(contractor, nMonth);
+            if (countResult.numberOfOverduePayments() >= numberOfOverduePaymentsLimit) {
+                result.getAdditionalWarnings().add("Отказано в увеличении суммы лимита по причине большого количества просрочек");
+                return result;
+            }
+
+            if (countResult.amountOfOverduePayments() >= amountOfOverduePaymentsLimit)  {
+                result.getAdditionalWarnings().add("Отказано в увеличении суммы лимита по причине длительности просрочек");
+                return result;
+            }
+
+            double limitPeriodDenominator = 0;
+
+            if (primaryRate > 10 && primaryRate <= 20) {
+                if (secondaryRate <= 20) limitPeriodDenominator = 3.8;
+                else if (secondaryRate <= 35) limitPeriodDenominator = 3.6;
+                else if (secondaryRate <= 50) limitPeriodDenominator = 3.4;
+            } else if (primaryRate > 21 && primaryRate <= 35) {
+                if (secondaryRate <= 20) limitPeriodDenominator = 2.8;
+                else if (secondaryRate <= 35) limitPeriodDenominator = 2.6;
+                else if (secondaryRate <= 50) limitPeriodDenominator = 2.4;
+            } else if (primaryRate > 36 && primaryRate <= 50) {
+                if (secondaryRate <= 20) limitPeriodDenominator = 1.8;
+                else if (secondaryRate <= 35) limitPeriodDenominator = 1.6;
+                else if (secondaryRate <= 50) limitPeriodDenominator = 1.4;
+            }
+
+
+            double limitAmount = (double) contractorDTO.getRevenue() / 365 * creditPaymentTerm / limitPeriodDenominator;
+            result.setResultString("Кредит разрешен на " + creditPaymentTerm + " дней, сумма - " + numberFormat.format(Math.ceil(limitAmount)) + "\n");
         }
-
-        OverdueResult countResult = countOverdues(contractor, nMonth);
-        if (countResult.numberOfOverduePayments() >= numberOfOverduePaymentsLimit) {
-            result.getAdditionalWarnings().add("Отказано в увеличении суммы лимита по причине большого количества просрочек");
-            return result;
-        }
-
-        if (countResult.amountOfOverduePayments() >= amountOfOverduePaymentsLimit)  {
-            result.getAdditionalWarnings().add("Отказано в увеличении суммы лимита по причине длительности просрочек");
-            return result;
-        }
-
-        double limitPeriodDenominator = 0;
-
-        if (primaryRate > 10 && primaryRate <= 20) {
-            if (secondaryRate <= 20) limitPeriodDenominator = 3.8;
-            else if (secondaryRate <= 35) limitPeriodDenominator = 3.6;
-            else if (secondaryRate <= 50) limitPeriodDenominator = 3.4;
-        } else if (primaryRate > 21 && primaryRate <= 35) {
-            if (secondaryRate <= 20) limitPeriodDenominator = 2.8;
-            else if (secondaryRate <= 35) limitPeriodDenominator = 2.6;
-            else if (secondaryRate <= 50) limitPeriodDenominator = 2.4;
-        } else if (primaryRate > 36 && primaryRate <= 50) {
-            if (secondaryRate <= 20) limitPeriodDenominator = 1.8;
-            else if (secondaryRate <= 35) limitPeriodDenominator = 1.6;
-            else if (secondaryRate <= 50) limitPeriodDenominator = 1.4;
-        }
-
-
-        double limitAmount = (double) contractorDTO.getRevenue() / 365 * creditPaymentTerm / limitPeriodDenominator;
-        result.setResultString("Кредит разрешен на " + creditPaymentTerm + " дней, сумма - " + numberFormat.format(Math.ceil(limitAmount)) + "\n");
         return result;
     }
 
