@@ -90,6 +90,48 @@ h2 {
     transition: .5s;
 }
 
+.btn-blue, .btn-red, .btn-yellow, .btn-green {
+    border: none;
+    color: white;
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 48px;
+    height: 42px;
+}
+
+.btn-blue {
+    background-color: DodgerBlue;
+}
+
+.btn-blue:hover {
+    background-color: RoyalBlue;
+}
+
+.btn-red {
+    background-color: #b70b25;
+}
+
+.btn-red:hover {
+    background-color: #d68a8a;
+}
+
+.btn-yellow {
+    background-color: #f5cb09;
+}
+
+.btn-yellow:hover {
+    background-color: #ecdb72;
+}
+
+.btn-green {
+    background-color: #5dcc04;
+}
+
+.btn-green:hover {
+    background-color: #95ec72;
+}
+
 .pressed-button:hover, .pressed-button-red:hover {
     box-shadow: 0 0 0 0 rgba(0, 40, 120, 0);
     background-position: 0 0;

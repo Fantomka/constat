@@ -2,14 +2,13 @@ package ru.autoopt.constat.services.models;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.models.ContractRecord;
 import ru.autoopt.constat.models.Contractor;
+import ru.autoopt.constat.repositories.ContractRecordRepository;
 import ru.autoopt.constat.repositories.ContractorRepository;
 import ru.autoopt.constat.services.calculators.Calculator;
 import ru.autoopt.constat.services.calculators.StatusCode;
@@ -30,6 +29,7 @@ import static ru.autoopt.constat.util.common.CommonHelper.getDatePlusNMonth;
 public class ContractorService {
 
     private final ContractorRepository contractorRepository;
+    private final ContractRecordRepository contractRecordRepository;
     private final Calculator calculator;
     private final ReqEnricher reqEnricher;
     private final PetitionersOfArbitrationEnricher petitionersOfArbitrationEnricher;
@@ -47,23 +47,37 @@ public class ContractorService {
     }
 
     @Transactional
-    public void save(Contractor contractor) {
-        contractorRepository.save(contractor);
-    }
-    @Transactional
-    public void delete(ContractorDTO contractorDTO) {
-        contractorRepository.delete(contractorDTO.toEntity());
+    public void addContract(ContractorDTO contractorDTO, ContractRecord contract) {
+        Contractor contractor = contractorRepository.findByINN(contractorDTO.getINN()).get();
+        contract.setContractor(contractor);
+        contractRecordRepository.save(contract);
     }
 
     @Transactional
-    public void delete(String inn) {
+    public void updateContract(Long id, ContractRecord updatedContractRecord) {
+        ContractRecord contractToBeUpdated = contractRecordRepository.findById(id).get();
+
+        updatedContractRecord.setId(id);
+        updatedContractRecord.setContractor(contractToBeUpdated.getContractor());
+        contractRecordRepository.save(updatedContractRecord);
+    }
+
+    @Transactional
+    public void deleteContractorByInn(String inn) {
         contractorRepository.deleteByINN(inn);
+    }
+
+    @Transactional
+    public void deleteContractById(Long id) {
+        contractRecordRepository.deleteById(id);
     }
 
     public List<ContractRecord> getContractsByINN(String inn) {
         Contractor contractor = contractorRepository.findByINN(inn).get();
         Hibernate.initialize(contractor.getContracts());
-        return contractor.getContracts();
+        List<ContractRecord> listContracts = contractor.getContracts();
+        Collections.sort(listContracts);
+        return listContracts;
     }
 
     public record OverdueResult(int numberOfOverduePayments, int amountOfOverduePayments) {}
