@@ -2,9 +2,7 @@ package ru.autoopt.constat.services.models;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.autoopt.constat.dto.ContractorDTO;
@@ -49,15 +47,6 @@ public class ContractorService {
     }
 
     @Transactional
-    public void save(Contractor contractor) {
-        contractorRepository.save(contractor);
-    }
-    @Transactional
-    public void delete(ContractorDTO contractorDTO) {
-        contractorRepository.delete(contractorDTO.toEntity());
-    }
-
-    @Transactional
     public void addContract(ContractorDTO contractorDTO, ContractRecord contract) {
         Contractor contractor = contractorRepository.findByINN(contractorDTO.getINN()).get();
         contract.setContractor(contractor);
@@ -65,8 +54,13 @@ public class ContractorService {
     }
 
     @Transactional
-    public void delete(String inn) {
+    public void deleteContractorByInn(String inn) {
         contractorRepository.deleteByINN(inn);
+    }
+
+    @Transactional
+    public void deleteContractById(Long id) {
+        contractRecordRepository.deleteById(id);
     }
 
     public List<ContractRecord> getContractsByINN(String inn) {

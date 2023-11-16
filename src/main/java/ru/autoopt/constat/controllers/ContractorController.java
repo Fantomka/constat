@@ -3,7 +3,6 @@ package ru.autoopt.constat.controllers;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -118,6 +117,18 @@ public class ContractorController {
         return "contractors_v1/check/existing";
     }
 
+    @DeleteMapping("/delete/contract/{inn}")
+    public String deleteExistingContractor(
+        @PathVariable("inn") String inn,
+        @RequestParam(value = "id") Long id,
+        @RequestParam(value = "orgName") String orgName,
+        RedirectAttributes redirectAttributes
+    ) {
+        contractorService.deleteContractById(id);
+        redirectAttributes.addAttribute("orgName", orgName);
+        return "redirect:/contractors/check/existing/" + inn;
+    }
+
     @PostMapping("/add/contract/{inn}")
     public String recalculateContractor(
         @PathVariable("inn") String inn,
@@ -136,7 +147,7 @@ public class ContractorController {
 
     @DeleteMapping("/delete/existing/{inn}")
     public String deleteExistingContractor(@PathVariable("inn") String inn) {
-        contractorService.delete(inn);
+        contractorService.deleteContractorByInn(inn);
         return "redirect:/contractors/list";
     }
     @GetMapping("/check/danger-zone")
