@@ -89,14 +89,17 @@ public class ContractorController {
         Model model,
         @PathVariable("inn") String inn,
         @RequestParam(value = "orgName") String orgName,
-        @RequestParam(value = "addContract", required = false) Boolean addContract
+        @RequestParam(value = "addContract", required = false) Boolean addContract,
+        @RequestParam(value = "contractToEdit", required = false) Long contractToEdit,
+        @ModelAttribute("updatedContract") ContractRecord contractRecord,
+        @ModelAttribute("contract") @Valid ContractRecord contract
     ) {
         ContractorDTO contractorDTO = createContractorDTO(inn, orgName, 0);
         model.addAttribute("result", contractorService.recalculate(contractorDTO));
         model.addAttribute("contractor", contractorDTO);
         model.addAttribute("contracts", contractorService.getContractsByINN(contractorDTO.getINN()));
-        System.err.println(addContract);
         model.addAttribute("addContract", Objects.requireNonNullElse(addContract, false));
+        model.addAttribute("contractToEdit", contractToEdit);
         return "contractors_v1/check/existing";
     }
 
@@ -117,8 +120,22 @@ public class ContractorController {
         return "contractors_v1/check/existing";
     }
 
+
+    @PatchMapping("/update/contract/{inn}")
+    public String updateContract(
+            @PathVariable("inn") String inn,
+            @RequestParam(value = "id") Long id,
+            @ModelAttribute("updatedContract") ContractRecord updatedContract,
+            @RequestParam(value = "orgName") String orgName,
+            RedirectAttributes redirectAttributes
+    ) {
+        contractorService.updateContract(id, updatedContract);
+        redirectAttributes.addAttribute("orgName", orgName);
+        return "redirect:/contractors/check/existing/" + inn;
+    }
+
     @DeleteMapping("/delete/contract/{inn}")
-    public String deleteExistingContractor(
+    public String deleteContract(
         @PathVariable("inn") String inn,
         @RequestParam(value = "id") Long id,
         @RequestParam(value = "orgName") String orgName,

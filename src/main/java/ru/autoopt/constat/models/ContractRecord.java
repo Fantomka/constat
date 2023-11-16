@@ -1,6 +1,7 @@
 package ru.autoopt.constat.models;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name="contracts")
-public class ContractRecord {
+public class ContractRecord implements Comparable<ContractRecord> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,7 @@ public class ContractRecord {
 
     @Column(name = "given_at")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date givenAt;
 
     @Column(name = "expires_after")
@@ -116,5 +118,10 @@ public class ContractRecord {
     @Override
     public int hashCode() {
         return Objects.hash(id, givenAt, expiresAfter, daysOverdue, contractor);
+    }
+
+    @Override
+    public int compareTo(ContractRecord contractRecord) {
+        return getGivenAt().compareTo(contractRecord.getGivenAt());
     }
 }

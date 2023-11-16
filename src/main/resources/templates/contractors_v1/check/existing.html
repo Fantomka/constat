@@ -24,14 +24,11 @@
 
                 <div th:object="${contractor}">
                     <div th:if="${contractor.getFocusHref() != null}">
-                        <hr>
-                        <a th:href="${contractor.getFocusHref()}"
-                           th:text="${contractor.getFocusHref()}">VALUE</a>
+                        <hr><a th:href="${contractor.getFocusHref()}" th:text="${contractor.getFocusHref()}">VALUE</a>
                     </div>
 
                     <div th:if="${contractor.getSite() != null}">
-                        <a th:href="|https://${contractor.getSite()}|"
-                           th:text="${contractor.getOrgName()}">VALUE</a>
+                        <a th:href="|https://${contractor.getSite()}|" th:text="${contractor.getOrgName()}">VALUE</a>
                     </div>
 
                     <div th:if="${contractor.getSite() == null}">
@@ -76,42 +73,48 @@
                         </thead>
                         <tbody>
                         <div th:each="contract : ${contracts}">
-                            <tr>
-                                <td>
-                                    <span th:text="${contract.getGivenAt()}">VALUE</span>
-                                </td>
-                                <td>
-                                    <span th:text="${contract.getExpiresAfter()}">VALUE</span>
+                            <div th:if="${contractToEdit != contract.getId()}">
+                                <tr>
+                                    <td><span th:text="${contract.getGivenAt()}">VALUE</span></td>
+                                    <td><span th:text="${contract.getExpiresAfter()}">VALUE</span></td>
+                                    <td><span th:text="${contract.getDaysOverdue()}">VALUE</span></td>
+                                    <td style="display: flex">
+                                        <form method="GET" th:action="@{/contractors/check/existing/{inn}(inn=${contractor.getINN()})}" >
+                                            <input type="hidden" name="contractToEdit" th:value="${contract.getId()}">
+                                            <input type="hidden" name="orgName" th:value="${contractor.getOrgName()}">
+                                            <button class="btn-yellow"><i class="fa fa-edit"></i></button>
+                                        </form>
 
-                                </td>
-                                <td>
-                                    <span th:text="${contract.getDaysOverdue()}">VALUE</span>
-                                </td>
-                                <td>
-                                    <form th:method="DELETE" th:action="@{/contractors/delete/contract/{inn}(inn=${contractor.getINN()})}" >
-                                        <input type="hidden" name="id" th:value="${contract.getId()}">
-                                        <input type="hidden" name="orgName" th:value="${contractor.getOrgName()}">
-                                        <button class="btn-red"><i class="fa fa-trash"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
+                                        <form th:method="DELETE" th:action="@{/contractors/delete/contract/{inn}(inn=${contractor.getINN()})}" style="padding-left: 10px">
+                                            <input type="hidden" name="id" th:value="${contract.getId()}">
+                                            <input type="hidden" name="orgName" th:value="${contractor.getOrgName()}">
+                                            <button class="btn-red"><i class="fa fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </div>
+                            <div th:if="${contractToEdit == contract.getId()}">
+                                <form th:method="PATCH" th:action="@{/contractors/update/contract/{inn}(inn=${contractor.getINN()})}" th:object="${updatedContract}" style="padding-left: 10px">
+                                    <input type="hidden" name="orgName" th:value="${contractor.getOrgName()}">
+                                    <input type="hidden" name="id" th:value="${contract.getId()}">
+                                    <tr>
+                                        <td><input type="date" th:field="${updatedContract.givenAt}" th:value="${contract.getGivenAt()}"/></td>
+                                        <td><input type="text" th:field="${updatedContract.expiresAfter}" th:value="${contract.getExpiresAfter()}"/></td>
+                                        <td><input type="text" th:field="${updatedContract.daysOverdue}" th:value="${contract.getDaysOverdue()}"/></td>
+                                        <td><button class="btn-green"><i class="fa fa-check"></i></button></td>
+                                    </tr>
+                                </form>
+                            </div>
+
                         </div>
                         <div th:if="${addContract}">
                             <form th:method="POST" th:action="@{/contractors/add/contract/{inn}(inn=${contractor.getINN()})}">
                                 <input type="hidden" name="orgName" th:value="${contractor.getOrgName()}">
                                 <tr>
-                                    <td>
-                                        <input type="text" th:name="givenAt" id="givenAt"/>
-                                    </td>
-                                    <td>
-                                        <input type="text" th:name="expiresAfter" id="expiresAfter"/>
-                                    </td>
-                                    <td>
-                                        <input type="text" th:name="daysOverdue" id="daysOverdue"/>
-                                    </td>
-                                    <td>
-                                        <input type="submit" value="Добавить запись"/>
-                                    </td>
+                                    <td><input type="date" th:name="givenAt" id="givenAt"/></td>
+                                    <td><input type="text" th:name="expiresAfter" id="expiresAfter"/></td>
+                                    <td><input type="text" th:name="daysOverdue" id="daysOverdue"/></td>
+                                    <td><button class="btn-green"><i class="fa fa-check"></i></button></td>
                                 </tr>
                             </form>
                         </div>
@@ -122,7 +125,7 @@
                         <input type="hidden" name="addContract" th:value="true">
                         <input type="hidden" name="rate" th:value="${contractor.getRate()}">
                         <input type="hidden" name="orgName" th:value="${contractor.getOrgName()}">
-                        <button class="btn"><i class="fa fa-plus"></i></button>
+                        <button class="btn-blue"><i class="fa fa-plus"></i></button>
                     </form>
                 </div>
 

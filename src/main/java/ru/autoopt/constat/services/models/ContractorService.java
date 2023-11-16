@@ -54,6 +54,15 @@ public class ContractorService {
     }
 
     @Transactional
+    public void updateContract(Long id, ContractRecord updatedContractRecord) {
+        ContractRecord contractToBeUpdated = contractRecordRepository.findById(id).get();
+
+        updatedContractRecord.setId(id);
+        updatedContractRecord.setContractor(contractToBeUpdated.getContractor());
+        contractRecordRepository.save(updatedContractRecord);
+    }
+
+    @Transactional
     public void deleteContractorByInn(String inn) {
         contractorRepository.deleteByINN(inn);
     }
@@ -66,7 +75,9 @@ public class ContractorService {
     public List<ContractRecord> getContractsByINN(String inn) {
         Contractor contractor = contractorRepository.findByINN(inn).get();
         Hibernate.initialize(contractor.getContracts());
-        return contractor.getContracts();
+        List<ContractRecord> listContracts = contractor.getContracts();
+        Collections.sort(listContracts);
+        return listContracts;
     }
 
     public record OverdueResult(int numberOfOverduePayments, int amountOfOverduePayments) {}
