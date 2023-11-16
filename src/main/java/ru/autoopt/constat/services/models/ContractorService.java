@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.autoopt.constat.dto.ContractorDTO;
 import ru.autoopt.constat.models.ContractRecord;
 import ru.autoopt.constat.models.Contractor;
+import ru.autoopt.constat.repositories.ContractRecordRepository;
 import ru.autoopt.constat.repositories.ContractorRepository;
 import ru.autoopt.constat.services.calculators.Calculator;
 import ru.autoopt.constat.services.calculators.StatusCode;
@@ -30,6 +31,7 @@ import static ru.autoopt.constat.util.common.CommonHelper.getDatePlusNMonth;
 public class ContractorService {
 
     private final ContractorRepository contractorRepository;
+    private final ContractRecordRepository contractRecordRepository;
     private final Calculator calculator;
     private final ReqEnricher reqEnricher;
     private final PetitionersOfArbitrationEnricher petitionersOfArbitrationEnricher;
@@ -53,6 +55,13 @@ public class ContractorService {
     @Transactional
     public void delete(ContractorDTO contractorDTO) {
         contractorRepository.delete(contractorDTO.toEntity());
+    }
+
+    @Transactional
+    public void addContract(ContractorDTO contractorDTO, ContractRecord contract) {
+        Contractor contractor = contractorRepository.findByINN(contractorDTO.getINN()).get();
+        contract.setContractor(contractor);
+        contractRecordRepository.save(contract);
     }
 
     @Transactional

@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity
@@ -85,10 +88,15 @@ public class ContractRecord {
     }
 
     public ContractRecord(String givenAt, int expiresAfter, int daysOverdue) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
             this.givenAt = formatter.parse(givenAt);
-        } catch (ParseException ignored) {}
+        } catch (ParseException ignored) {
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                this.givenAt = formatter.parse(givenAt);
+            } catch (ParseException ignored2) {}
+        }
         this.expiresAfter = expiresAfter;
         this.daysOverdue = daysOverdue;
     }

@@ -5,6 +5,7 @@
     <title>Пересчёт условий по кредиту</title>
     <meta name="description" content="Перерасчёт условий контрагента.">
     <link rel="stylesheet" th:href="@{~/styles/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -38,39 +39,6 @@
                     </div>
                 </div>
 
-                <div th:if="${contracts != null && !contracts.isEmpty()}">
-                    <hr>
-                    <h3>
-                        <b>История сделок:</b>
-                    </h3>
-                    <br/>
-                    <table border="1">
-                        <thead>
-                        <tr>
-                            <td>Дата выдачи лимита</td>
-                            <td>Срок выдачи [дн]</td>
-                            <td>Срок просрочки выплаты [дн]</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <div th:each="contract : ${contracts}">
-                            <tr>
-                                <td>
-                                    <span th:text="${contract.getGivenAt()}">VALUE</span>
-                                </td>
-                                <td>
-                                    <span th:text="${contract.getExpiresAfter()}">VALUE</span>
-
-                                </td>
-                                <td>
-                                    <span th:text="${contract.getDaysOverdue()}">VALUE</span>
-                                </td>
-                            </tr>
-                        </div>
-                        </tbody>
-                    </table>
-                </div>
-
                 <div th:if="${result}" th:object="${result}">
                     <hr>
                     <div th:if="${!result.getAdditionalInfo().isEmpty()}">
@@ -89,11 +57,67 @@
                         <p class="link" th:text="${result.getResultString()}">результат пересчёта</p>
                     </div>
 
-                    <div th:object="${contractor}">
-                        <form th:method="DELETE" th:action="@{/contractors/delete/existing/{inn}(inn=${contractor.getINN()})}" >
-                            <input class="pressed-button-red" type="submit" value="Удалить контрагента"/>
-                        </form>
-                    </div>
+                </div>
+
+                <div th:if="${contracts != null && !contracts.isEmpty()}">
+                    <hr>
+                    <h3>
+                        <b>История сделок:</b>
+                    </h3>
+                    <br/>
+                    <table border="1">
+                        <thead>
+                        <tr>
+                            <td>Дата выдачи лимита</td>
+                            <td>Срок выдачи [дн]</td>
+                            <td>Срок просрочки выплаты [дн]</td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:each="contract : ${contracts}">
+                            <tr>
+                                <td>
+                                    <span th:text="${contract.getGivenAt()}">VALUE</span>
+                                </td>
+                                <td>
+                                    <span th:text="${contract.getExpiresAfter()}">VALUE</span>
+
+                                </td>
+                                <td>
+                                    <span th:text="${contract.getDaysOverdue()}">VALUE</span>
+                                </td>
+                            </tr>
+                        </div>
+                        <div th:if="${addContract}">
+                            <form th:method="POST" th:action="@{/contractors/add/contract/{inn}(inn=${contractor.getINN()})}">
+                                <input type="hidden" name="orgName" th:value="${contractor.getOrgName()}">
+                                <tr>
+                                    <td>
+                                        <input type="text" th:name="givenAt" id="givenAt"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" th:name="expiresAfter" id="expiresAfter"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" th:name="daysOverdue" id="daysOverdue"/>
+                                    </td>
+                                    <td>
+                                        <input type="submit" value="Добавить запись"/>
+                                    </td>
+                                </tr>
+                            </form>
+                        </div>
+                        </tbody>
+                    </table>
+
+                    <form method="GET" id="form-add-contract" th:action="@{/contractors/check/existing/{inn}(inn=${contractor.getINN()})}" >
+                        <input type="hidden" name="addContract" th:value="true">
+                        <input type="hidden" name="rate" th:value="${contractor.getRate()}">
+                        <input type="hidden" name="orgName" th:value="${contractor.getOrgName()}">
+                        <button class="btn"><i class="fa fa-plus"></i></button>
+                    </form>
+
                 </div>
 
                 <div class="definition">
@@ -114,6 +138,14 @@
                 <form method="GET" action="/contractors">
                     <input class="pressed-button" type="submit" value="На главное меню"/>
                 </form>
+
+                <div th:if="${result}" th:object="${result}">
+                    <div th:object="${contractor}">
+                        <form th:align="right" th:method="DELETE" th:action="@{/contractors/delete/existing/{inn}(inn=${contractor.getINN()})}" >
+                            <input class="pressed-button-red" type="submit" value="Удалить контрагента"/>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
